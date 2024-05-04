@@ -36,8 +36,11 @@ const BookList = () => {
 
       <div className='pagination-container' style={{ position: 'fixed', bottom: '20px', left: '50%', transform: 'translateX(-50%)', zIndex: '999' }}>
         <Link to={`?page=${currentPage > 1 ? currentPage - 1 : 1}`} className="layoutButton" disabled={currentPage === 1} onClick={handlePageChange()}>Previous</Link>
-        <span style={{ marginRight: '10px' }}>Page {currentPage} of {totalPages}</span>
         <Link to={`?page=${currentPage < totalPages ? currentPage + 1 : totalPages}`} className="layoutButton" disabled={currentPage === totalPages} onClick={handlePageChange()}>Next</Link>
+        <br />
+        <br />
+        <br />
+        <span style={{ textAlign: 'center' }}>Page {currentPage} of {totalPages}</span>
       </div>
     </div>
   );
