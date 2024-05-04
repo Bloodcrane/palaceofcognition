@@ -59,7 +59,7 @@ const SingleArticlePage = () => {
       {generateMetaTags()}
       <div>
       <header>
-                <HeaderLayout showMain={true} showBooks={true} showMovies={true} showArticles={true} />
+                <HeaderLayout showMain={false} showBooks={true} showMovies={true} showArticles={true} />
       </header>
         <div className="article-container"
           style={{ display: 'flex',
