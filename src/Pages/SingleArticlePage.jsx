@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import articles from '../Articles.json';
 import { Helmet } from 'react-helmet';
+import HeaderLayout from '../Layouts/Header';
 
 const SingleArticlePage = () => {
   const { title } = useParams();
@@ -57,6 +58,9 @@ const SingleArticlePage = () => {
     <div>
       {generateMetaTags()}
       <div>
+      <header>
+                <HeaderLayout showMain={true} showBooks={true} showMovies={true} showArticles={true} />
+      </header>
         <div className="article-container"
           style={{ display: 'flex',
           backgroundImage: `url(${article.imageUrl})`,
@@ -65,7 +69,7 @@ const SingleArticlePage = () => {
           width: 'auto',
           height: 'auto',
         }}>
-          <div style={{backdropFilter: 'blur(15px)',  textShadow: '2px 2px 5px black', backgroundColor: '#2e2e2e8b', textAlign:'center'}}>
+          <div style={{backdropFilter: 'blur(15px)', marginTop:"60px", textShadow: '2px 2px 5px black', backgroundColor: '#2e2e2e8b', textAlign:'center'}}>
             <h1>{article.title}</h1>
             <p>ავტორი: {article.author}</p>
             {isLoading ? 'Loading full text...' : error ? 'Error loading full text' : (
