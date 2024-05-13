@@ -12,7 +12,7 @@ const MoviePage = () => {
             <header>
                 <HeaderLayout showMain={true} showBooks={true} showMovies={false} showArticles={true} />
             </header>
-            <h1 style={Style}>კინო კლუბი</h1>
+            <h1 style={Style}>კინოკლუბი</h1>
 
             {/* ფილმები */}
             <MovieList />
