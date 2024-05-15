@@ -32,8 +32,8 @@ const ArticleList = () => {
             <div className="btnMargin">
               <Link
                 to={{
-                  pathname: `/article/${article.id}`,
-                  state: { articleId: article.id }
+                  pathname: `/article/${article.title}`, // Pass the article ID
+                  state: { articleId: article.title } // Pass the article ID in the state
                 }}
                 className="webComponent-button"
               >
