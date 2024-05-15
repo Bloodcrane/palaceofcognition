@@ -25,7 +25,7 @@ const router = [
             },
             {
                 element: <SingleArticlePage />,
-                path: '/article/:id' // Dynamic path for specific article IDs
+                path: '/article/id' // Dynamic path for specific article IDs
               }
         ]
     },

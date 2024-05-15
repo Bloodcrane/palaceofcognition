@@ -6,7 +6,10 @@ import HeaderLayout from '../Layouts/Header';
 
 const SingleArticlePage = () => {
   const { title } = useParams();
-  const article = articles.find((article) => article.title === title);
+  console.log(title)
+  const articleId = parseInt(title, 10); // Or use another conversion method if IDs are different
+  console.log(articleId)
+  const article = articles.find((article) => article.id === articleId);
   const [fullText, setFullText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);

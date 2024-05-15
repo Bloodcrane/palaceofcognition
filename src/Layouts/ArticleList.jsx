@@ -11,38 +11,35 @@ const ArticleList = () => {
 
   const startIndex = (currentPage - 1) * articlesPerPage;
   const endIndex = startIndex + articlesPerPage;
-  const currentarticles = articles.slice(startIndex, endIndex);
+  const currentArticles = articles.slice(startIndex, endIndex);
 
   const totalPages = Math.ceil(articles.length / articlesPerPage);
 
   const handlePageChange = () => {
-    window.scrollTo({top: 0, left: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
   };
 
   return (
     <div>
       <div style={{ marginBottom: '100px' }}>
-        {currentarticles.map((article) => (
-        <div key={article.id} className="webComponent" style={{ backgroundColor: colors[article.id % colors.length] }}>
-          <div className="webComponent-inside-container">
-            <img src={article.imageUrl} alt={article.title} className="webComponent-image" />
-            <h2 className="webComponent-title">{article.title}</h2>
-            <label className='webComponent-author'>{article.author}</label>
-            <p className="webComponent-description">{article.description}</p>
-            <div className="btnMargin">
-              <Link
-                to={{
-                  pathname: `/article/${article.title}`, // Pass the article ID
-                  state: { articleId: article.title } // Pass the article ID in the state
-                }}
-                className="webComponent-button"
-              >
-                View More
-              </Link>
+        {currentArticles.map((article) => (
+          <div key={article.id} className="webComponent" style={{ backgroundColor: colors[article.id % colors.length] }}>
+            <div className="webComponent-inside-container">
+              <img src={article.imageUrl} alt={article.title} className="webComponent-image" />
+              <h2 className="webComponent-title">{article.title}</h2>
+              <label className='webComponent-author'>{article.author}</label>
+              <p className="webComponent-description">{article.description}</p>
+              <div className="btnMargin">
+                <Link
+                  to={`/article/${article.id}`}  // Use article.id in the URL path
+                  className="webComponent-button"
+                >
+                  View More
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
       </div>
 
       <div className='pagination-container' style={{ position: 'fixed', bottom: '20px', left: '50%', transform: 'translateX(-50%)', zIndex: '999' }}>
