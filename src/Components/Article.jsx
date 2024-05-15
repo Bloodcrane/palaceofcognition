@@ -17,7 +17,7 @@ const ArticleComponent = ({ imageUrl, title, description, id }) => {
         <h2 className="webComponent-title">{title}</h2>
         <p className="webComponent-description">{description}</p>
         <div className='btnMargin'>
-        <Link to={`/article/${encodeURIComponent(title)}`} className="webComponent-button">View More</Link>
+        <Link to={`/article/${id}`} className="webComponent-button">View More</Link>
         </div>
       </div>
     </div>

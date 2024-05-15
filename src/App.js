@@ -20,7 +20,7 @@ const App = () => (
         <Route path="/books" element={<BookPage />} />
         <Route path="/movies" element={<MoviePage />} />
         <Route path="/article/:title" element={<SingleArticlePage />} />
-        <Route path="/articles/:id" component={SingleArticlePage} />
+        <Route path="/articles/:id" component={<SingleArticlePage />} />
       </Routes>
     </Suspense>
   </HashRouter>
