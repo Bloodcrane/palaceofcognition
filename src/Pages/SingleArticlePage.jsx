@@ -5,9 +5,11 @@ import { Helmet } from 'react-helmet';
 import HeaderLayout from '../Layouts/Header';
 
 const SingleArticlePage = () => {
-  const { id } = useParams();
-  console.log("ID from URL:", id);
-  const article = articles.find((article) => article.id === id);
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const id = urlParams.get('id');
+  console.log('ID from URL:', id);
+  const article = articles.findIndex(article => article.id === id);
   const [fullText, setFullText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
