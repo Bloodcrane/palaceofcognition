@@ -23,10 +23,10 @@ const HeaderLayout = ({ showMain = true, showBooks = true, showMovies = true, sh
             {isDesktopOrLaptop && (
             <header className='layoutDiv'>
                 <h2>Palace Of Cognition</h2>
-                {showMain && <Link onClick={handlePageChange()} className="layoutButton" to={'/'}>მთავარი</Link>}
-                {showBooks && <Link onClick={handlePageChange()} className="layoutButton" to={'/books'}>წიგნები</Link>}
-                {showMovies && <Link onClick={handlePageChange()} className="layoutButton" to={'/movies'}>ფილმები</Link>}
-                {showArticles && <Link onClick={handlePageChange()} className="layoutButton" to={'/articles'}>რეცენზიები</Link>}
+                {<Link onClick={handlePageChange()} className="layoutButton" to={'/'}>მთავარი</Link>}
+                {<Link onClick={handlePageChange()} className="layoutButton" to={'/books'}>წიგნები</Link>}
+                {<Link onClick={handlePageChange()} className="layoutButton" to={'/movies'}>ფილმები</Link>}
+                {<Link onClick={handlePageChange()} className="layoutButton" to={'/articles'}>რეცენზიები</Link>}
 
                 <Outlet />
             </header>
