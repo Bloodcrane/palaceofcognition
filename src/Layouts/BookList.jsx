@@ -23,7 +23,7 @@ const BookList = () => {
     <div>
       <div style={{ marginBottom: '100px' }}>
         {currentBooks.map((book) => (
-          <div key={book.id} className="webComponent" style={{ backgroundColor: colors[Math.floor(Math.random() * colors.length)] }}>
+          <div key={book.id} className="webComponent" style={{ backgroundColor: colors[book.id % colors.length], border: `2px solid`, boxShadow: `0px 0px 30px ${colors[book.id % colors.length]}`, borderColor: `${colors[book.id % colors.length]}`}}>
             <div className="webComponent-inside-container">
               <img src={book.imageUrl} alt={book.title} className="webComponent-image" />
               <h2 className="webComponent-title">{book.title}</h2>

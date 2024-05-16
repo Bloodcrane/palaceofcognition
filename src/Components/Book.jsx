@@ -8,6 +8,8 @@ const BookComponent = ({ imageUrl, title, description, author}) => {
 
   const Style = {
     backgroundColor: randomColor,
+    border: `2px solid ${randomColor}`, // Specify the border color
+    boxShadow: `0px 0px 30px ${randomColor}`,
   };
 
   return (

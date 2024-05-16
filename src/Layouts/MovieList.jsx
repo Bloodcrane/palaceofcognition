@@ -23,7 +23,7 @@ const MovieList = () => {
     <div>
       <div style={{ marginBottom: '100px' }}>
         {currentMovies.map((movie) => (
-        <div key={movie.id} className="webComponent" style={{ backgroundColor: colors[Math.floor(Math.random() * colors.length)] }}>
+          <div key={movie.id} className="webComponent" style={{ backgroundColor: colors[movie.id % colors.length], border: `2px solid`, boxShadow: `0px 0px 30px ${colors[movie.id % colors.length]}`, borderColor: `${colors[movie.id % colors.length]}`}}>
           <div className="webComponent-inside-container">
             <img src={movie.imageUrl} alt={movie.title} className="webComponent-image" />
             <h2 className="webComponent-title">{movie.title}</h2>

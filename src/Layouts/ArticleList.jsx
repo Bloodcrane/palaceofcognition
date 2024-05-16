@@ -23,7 +23,7 @@ const ArticleList = () => {
     <div>
       <div style={{ marginBottom: '100px' }}>
         {currentArticles.map((article) => (
-          <div key={article.id} className="webComponent" style={{ backgroundColor: colors[article.id % colors.length] }}>
+          <div key={article.id} className="webComponent" style={{ backgroundColor: colors[article.id % colors.length], border: `2px solid`, boxShadow: `0px 0px 30px ${colors[article.id % colors.length]}`, borderColor: `${colors[article.id % colors.length]}`}}>
             <div className="webComponent-inside-container">
               <img src={article.imageUrl} alt={article.title} className="webComponent-image" />
               <h2 className="webComponent-title">{article.title}</h2>
