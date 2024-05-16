@@ -39,15 +39,22 @@ body {
 
 .article-container {
   flex-direction: column;
-  color: #fff;
+  line-height: 1.8;
+  color: #ffffffd2;
   font-family: mainFont;
   text-align: center;
   justify-content: center;
   transition: all 0.3s;
+  text-rendering: optimizeSpeed;
   -webkit-transition: all 0.3s;
   -moz-transition: all 0.3s;
   -ms-transition: all 0.3s;
   -o-transition: all 0.3s;
+}
+
+.fullText {
+  margin-left: 9px;
+  margin-right: 9px;
 }
 
 
@@ -143,6 +150,7 @@ body {
   backdrop-filter: blur(10px);
   box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.548);
   background-image: url('./Images/Style/noise-dark.png');
+  z-index: 9999;
 }
 
 .layoutDiv h2 {
@@ -154,6 +162,8 @@ body {
   font-family: "IM Fell English", serif;
   font-weight: 400;
   font-style: normal;
+  text-shadow: 0px 0px 8px black;
+  text-decoration: overline;
 }
 
 .mobileShowButton {
@@ -164,13 +174,14 @@ body {
   -webkit-tap-highlight-color: transparent;
   text-shadow: 3px 3px 5px #00000022;
   box-shadow: 0px 0px 10px #5e534c;
-  padding: 10px 50px 10px;
+  padding: 5px 50px 5px;
   border-radius: 5px;
   border-style: none;
   cursor: pointer;
   color: #ffffff;
   font-weight: 700;
-  font-size: 25px;
+  font-size: 20px;
+  margin-top: -50px;
   font-style: normal;
   background-image: url('./Images/Style/noise-dark.png');
   background-color: #5e534c;

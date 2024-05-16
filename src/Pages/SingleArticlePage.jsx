@@ -72,11 +72,11 @@ const SingleArticlePage = () => {
           width: 'auto',
           height: 'auto',
         }}>
-          <div style={{backdropFilter: 'blur(15px)', marginTop:"60px", textShadow: '2px 2px 5px black', backgroundColor: '#2e2e2e8b', textAlign:'center'}}>
+          <div style={{backdropFilter: 'blur(50px)', marginTop:"60px", textShadow: '2px 2px 5px black', backgroundColor: '#000000b3', textAlign:'center'}}>
             <h1>{article.title}</h1>
             <p>ავტორი: {article.author}</p>
             {isLoading ? 'Loading full text...' : error ? 'Error loading full text' : (
-              <p style={{ maxWidth: '800px', margin: '0 auto', fontSize:'20px' }}>{fullText}</p>
+              <p className='fullText' style={{ maxWidth: '800px', margin: '0 auto', fontSize:'20px' }}>{fullText}</p>
             )}
           </div>
         </div>
