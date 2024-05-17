@@ -80,7 +80,7 @@ const SingleArticlePage = () => {
             <p>ავტორი: {article.author}</p>
             <img src={article.imageUrl} alt='' style={{width:"auto", height:"300px", borderRadius: "10px", boxShadow:"0px 5px 5px #00000099"}}></img>
             {isLoading ? 'Loading full text...' : error ? 'Error loading full text' : (
-              <p className='fullText' style={{ maxWidth: isDesktopOrLaptop ? '800px' : '450px', margin: '0 auto', fontSize:'23px' }}>{fullText}</p>
+              <p className='fullText' style={{ maxWidth: isDesktopOrLaptop ? '800px' : '400px', margin: '0 auto', fontSize:'23px' }}>{fullText}</p>
             )}
           </div>
         </div>
