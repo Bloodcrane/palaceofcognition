@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import articles from '../Articles.json';
+import { useMediaQuery } from 'react-responsive';
 import { Helmet } from 'react-helmet';
 import HeaderLayout from '../Layouts/Header';
 
@@ -13,6 +14,9 @@ const SingleArticlePage = () => {
   const [fullText, setFullText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const isDesktopOrLaptop = useMediaQuery({ query: '(min-width: 1224px)' });
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' });
 
   const generateMetaTags = () => {
     if (article) {
@@ -66,17 +70,17 @@ const SingleArticlePage = () => {
       </header>
         <div className="article-container"
           style={{ display: 'flex',
-          backgroundImage: `url(${article.imageUrl})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           width: 'auto',
           height: 'auto',
         }}>
-          <div style={{backdropFilter: 'blur(50px)', marginTop:"60px", textShadow: '2px 2px 5px black', backgroundColor: '#000000b3', textAlign:'center'}}>
+          <div style={{backdropFilter: 'blur(50px)', marginTop:"60px", textShadow: '2px 2px 5px black', backgroundImage: 'linear-gradient(#131313, #0c0c0c)', textAlign:'center'}}>
             <h1>{article.title}</h1>
             <p>ავტორი: {article.author}</p>
+            <img src={article.imageUrl} alt='' style={{width:"auto", height:"300px", borderRadius: "10px", boxShadow:"0px 5px 5px #00000099"}}></img>
             {isLoading ? 'Loading full text...' : error ? 'Error loading full text' : (
-              <p className='fullText' style={{ maxWidth: '800px', margin: '0 auto', fontSize:'20px' }}>{fullText}</p>
+              <p className='fullText' style={{ maxWidth: isDesktopOrLaptop ? '800px' : '450px', margin: '0 auto', fontSize:'23px' }}>{fullText}</p>
             )}
           </div>
         </div>

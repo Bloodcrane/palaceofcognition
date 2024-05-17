@@ -53,8 +53,11 @@ body {
 }
 
 .fullText {
-  margin-left: 9px;
+  margin-left: 95px;
   margin-right: 95px;
+  color: #c5b9af;
+  text-align:justify;
+  word-break:keep-all;
 }
 
 
