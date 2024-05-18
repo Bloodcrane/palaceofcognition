@@ -83,7 +83,7 @@ const SingleArticlePage = () => {
               <p className='fullText' style={{ maxWidth: isDesktopOrLaptop ? '800px' : '400px', margin: '0 auto', fontSize:'23px' }}>{fullText}</p>
             )}
           </div>
-        </div>
+        </div> 
       </div>
     </div>
   );
