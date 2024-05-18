@@ -16,7 +16,6 @@ const SingleArticlePage = () => {
   const [error, setError] = useState(null);
 
   const isDesktopOrLaptop = useMediaQuery({ query: '(min-width: 1224px)' });
-  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' });
 
   const generateMetaTags = () => {
     if (article) {
