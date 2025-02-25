@@ -3,6 +3,10 @@ import { HashRouter, Routes, Route } from 'react-router-dom';
 import LoaderLayout from './Layouts/Loader';
 import './App.css';
 
+import SignUp from './Pages/SignUp';
+import Login from './Pages/Login';
+// import ProtectedRoute from './ProtectedRoute';
+
 const AboutPage = lazy(() => import('./Pages/AboutPage'));
 const ArticlePage = lazy(() => import('./Pages/ArticlePage'));
 const HomePage = lazy(() => import('./Pages/HomePage'));
@@ -15,6 +19,8 @@ const App = () => (
     <Suspense fallback={LoaderLayout}>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/articles" element={<ArticlePage />} />
         <Route path="/books" element={<BookPage />} />

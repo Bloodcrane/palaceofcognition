@@ -99,11 +99,13 @@ body {
 }
 
 
+
 .webComponent {
   background-color: antiquewhite;
   text-align: center;
   margin: 50px auto;
-  padding-bottom: 55px;
+  margin-bottom: 50px;
+  padding-bottom: 45px;
   width: 400px;
   max-width: 430px;
   border-radius: 15px;
@@ -307,17 +309,18 @@ body {
 }
 
 .btnMargin{
-  margin-bottom: 15px;
+  display:grid;
+  justify-content:space-evenly;
 }
 
-
 .webComponent-button{
+  transform: translateY(15px);
   padding: 10px 23px;
   font-size: 16px;
   font-family: mainFont;
   text-shadow: 2px 2px 5px black;
   box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.589);
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   text-decoration: none;
   color: #fff;
   background-color: #2e2e2e;
