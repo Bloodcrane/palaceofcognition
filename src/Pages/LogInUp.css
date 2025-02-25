@@ -1,24 +1,15 @@
-
 * {
 box-sizing: border-box;
 margin: 0;
 padding: 0;
 }
 
-
-html, body {
-height: 100%;
-font-family: 'Roboto', sans-serif;
-background-color: #121212;
-color: #e0e0e0;
-}
-
-body {
+.loginPage {
+transform: translateY(50%);
 display: flex;
 align-items: center;
 justify-content: center;
 }
-
 
 .loginPage {
 background-color: #1e1e1e;
@@ -28,20 +19,26 @@ box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 width: 100%;
 max-width: 400px;
 text-align: center;
+margin: auto;
+position: relative; /* Added to position child elements absolutely */
 }
-
 
 .loginPage h2 {
 margin-bottom: 1.5rem;
+margin-top: 1.5rem;
 font-size: 1.5rem;
 color: #ffffff;
+position: absolute; /* Positioning the h2 absolutely */
+top: 0; /* Aligns the h2 to the top of the container */
+left: 50%; /* Moves the h2 to the center horizontally */
+transform: translateX(-50%); /* Adjusts the h2 to be exactly centered */
 }
-
 
 .loginPage form {
 display: flex;
 flex-direction: column;
 gap: 1rem;
+margin-top: 6rem; /* Added margin to prevent overlap with h2 */
 }
 
 .loginPage input {
@@ -51,13 +48,14 @@ border-radius: 5px;
 background-color: #333;
 color: #fff;
 font-size: 1rem;
+width: 100%;
 }
 
 .loginPage input::placeholder {
 color: #bbb;
 }
 
-.webComponent-button {
+.webComponent-button-2 {
 padding: 0.75rem 1rem;
 border: none;
 border-radius: 5px;
@@ -66,9 +64,10 @@ color: #fff;
 font-size: 1rem;
 cursor: pointer;
 transition: background-color 0.3s ease;
+width: 100%;
 }
 
-.webComponent-button:hover {
+.webComponent-button-2:hover {
 background-color: #3700b3;
 }
 
@@ -76,14 +75,13 @@ background-color: #3700b3;
 margin-top: 0.5rem;
 }
 
-
-.webComponent {
+.webComponent-2 {
 background-color: antiquewhite;
 text-align: center;
-margin: 50px auto;
+margin: auto;
 margin-bottom: 50px;
 padding-bottom: 45px;
-width: 400px;
+width: 100%;
 max-width: 430px;
 border-radius: 15px;
 -webkit-border-radius: 15px;

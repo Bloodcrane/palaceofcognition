@@ -45,8 +45,8 @@ const Login = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button style={{ backgroundColor: '#5baa51' }} className='webComponent-button' type="submit">შესვლა</button>
-        <button style={{ backgroundColor: '#2d5972' }} className='webComponent-button' onClick={handleSignUpRedirect}>ანგარიშის შექმნა</button>
+        <button style={{ backgroundColor: '#5baa51' }} className='webComponent-button-2' type="submit">შესვლა</button>
+        <button style={{ backgroundColor: '#2d5972' }} className='webComponent-button-2' onClick={handleSignUpRedirect}>ანგარიშის შექმნა</button>
       </form>
     </div>
   );
