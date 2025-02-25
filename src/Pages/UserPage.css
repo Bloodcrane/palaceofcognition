@@ -1,0 +1,35 @@
+.userPage {
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100vh;
+background-color: #161616;
+}
+
+.profileContainer {
+text-align: center;
+background-color: #131212;
+padding: 20px;
+border-radius: 10px;
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.profileIcon {
+margin-bottom: 20px;
+background-image: url(../Images/user-profile-4255.svg);
+background-position: center;
+background-size: contain;
+background-repeat: no-repeat;
+padding: 80px;
+}
+
+h2 {
+margin: 10px 0;
+font-size: 1.5rem;
+color: #ffffff;
+}
+
+p {
+font-size: 1rem;
+color: #cecece;
+}
