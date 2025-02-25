@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { HashRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LoaderLayout from './Layouts/Loader';
 import './App.css';
 
@@ -15,7 +15,7 @@ const BookPage = lazy(() => import('./Pages/BookPage'));
 const SingleArticlePage = lazy(() => import('./Pages/SingleArticlePage'));
 
 const App = () => (
-  <HashRouter basename={process.env.PUBLIC_URL}>
+  <BrowserRouter basename={process.env.PUBLIC_URL}>
     <Suspense fallback={LoaderLayout}>
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -29,7 +29,7 @@ const App = () => (
         <Route path="/articles/id" component={<SingleArticlePage />} />
       </Routes>
     </Suspense>
-  </HashRouter>
+  </BrowserRouter>
 );
 
 export default App;
