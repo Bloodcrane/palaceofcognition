@@ -165,11 +165,11 @@ const ArticleList = () => {
                   <Link to={`/article/${articleUUID}`} className="webComponent-button">
                     🗞️ იხილეთ მეტი
                   </Link>
-                  <button className="webComponent-button" onClick={() => handleVote(articleUUID, 'like')}>
-                    👏 მომწონს {likes[articleUUID] || 0}
+                  <button style={{ backgroundColor: '#5b744d', borderColor: '#86947e' }} className="webComponent-button" onClick={() => handleVote(articleUUID, 'like')}>
+                    💚 მომწონს {likes[articleUUID] || 0}
                   </button>
-                  <button className="webComponent-button" onClick={() => handleVote(articleUUID, 'dislike')}>
-                    👎 არ მომწონს {dislikes[articleUUID] || 0}
+                  <button style={{ backgroundColor: '#3d2929', borderColor: '#856161' }} className="webComponent-button" onClick={() => handleVote(articleUUID, 'dislike')}>
+                    💔 არ მომწონს {dislikes[articleUUID] || 0}
                   </button>
                 </div>
               </div>
