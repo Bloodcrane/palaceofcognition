@@ -28,10 +28,10 @@ const UserPage = () => {
             <div className="profileIcon">
             </div>
             <h2>{user.email}</h2>
-            <p>Welcome to your profile page!</p>
+            <p>თქვენ პროფილის გვერდი</p>
             </div>
         ) : (
-            <p>Loading...</p>
+            <p>იტვირთება...</p>
         )}
         </div>
     </div>
