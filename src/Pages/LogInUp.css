@@ -1,0 +1,93 @@
+
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+}
+
+
+html, body {
+height: 100%;
+font-family: 'Roboto', sans-serif;
+background-color: #121212;
+color: #e0e0e0;
+}
+
+body {
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+
+.loginPage {
+background-color: #1e1e1e;
+padding: 2rem;
+border-radius: 10px;
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+width: 100%;
+max-width: 400px;
+text-align: center;
+}
+
+
+.loginPage h2 {
+margin-bottom: 1.5rem;
+font-size: 1.5rem;
+color: #ffffff;
+}
+
+
+.loginPage form {
+display: flex;
+flex-direction: column;
+gap: 1rem;
+}
+
+.loginPage input {
+padding: 0.75rem 1rem;
+border: none;
+border-radius: 5px;
+background-color: #333;
+color: #fff;
+font-size: 1rem;
+}
+
+.loginPage input::placeholder {
+color: #bbb;
+}
+
+.webComponent-button {
+padding: 0.75rem 1rem;
+border: none;
+border-radius: 5px;
+background-color: #6200ee;
+color: #fff;
+font-size: 1rem;
+cursor: pointer;
+transition: background-color 0.3s ease;
+}
+
+.webComponent-button:hover {
+background-color: #3700b3;
+}
+
+.loginPage button + button {
+margin-top: 0.5rem;
+}
+
+
+.webComponent {
+background-color: antiquewhite;
+text-align: center;
+margin: 50px auto;
+margin-bottom: 50px;
+padding-bottom: 45px;
+width: 400px;
+max-width: 430px;
+border-radius: 15px;
+-webkit-border-radius: 15px;
+-moz-border-radius: 15px;
+-ms-border-radius: 15px;
+-o-border-radius: 15px;
+}
