@@ -27,6 +27,8 @@ const HeaderLayout = ({ showMain = true, showBooks = true, showMovies = true, sh
                 {<Link onClick={handlePageChange()} className="layoutButton" to={'/books'}>წიგნები</Link>}
                 {<Link onClick={handlePageChange()} className="layoutButton" to={'/movies'}>ფილმები</Link>}
                 {<Link onClick={handlePageChange()} className="layoutButton" to={'/articles'}>რეცენზიები</Link>}
+                {<Link onClick={handlePageChange()} style={{borderColor: '#598eff', color: '#598eff' }} className="layoutButton" to={'/signup'}>ანგარიში</Link>}
+
 
                 <Outlet />
             </header>
@@ -42,6 +44,7 @@ const HeaderLayout = ({ showMain = true, showBooks = true, showMovies = true, sh
                     {<Link onClick={handlePageChange()} className="layoutButton-mobile" to={'/books'}>წიგნები</Link>}
                     {<Link onClick={handlePageChange()} className="layoutButton-mobile" to={'/movies'}>ფილმები</Link>}
                     {<Link onClick={handlePageChange()} className="layoutButton-mobile" to={'/articles'}>რეცენზიები</Link>}
+                    {<Link onClick={handlePageChange()} style={{borderColor: '#598eff', color: '#598eff' }} className="layoutButton-mobile" to={'/signup'}>ანგარიში</Link>}
                     </div>
                 <Outlet />
             </header>

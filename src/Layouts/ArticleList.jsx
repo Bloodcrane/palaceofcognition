@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import supabase from '../supabase';
 import { v5 as uuidv5 } from 'uuid';
 import articles from '../Articles.json';
@@ -7,12 +7,10 @@ import articles from '../Articles.json';
 const colors = ['#6b7a6f', '#775a5a', '#634875', '#647d94'];
 const articlesPerPage = 3;
 
-// Helper: Check if a string is a valid UUID
 function isValidUUID(str) {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(str);
 }
 
-// Helper: Compute a simple hash from a string (for selecting a color)
 function getColorIndex(str) {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
@@ -21,7 +19,6 @@ function getColorIndex(str) {
   return hash % colors.length;
 }
 
-// Use a fixed namespace for UUIDv5 (this can be any valid UUID; here we use the DNS namespace)
 const ARTICLE_NAMESPACE = '6ba7b810-9dad-11d1-80b4-00c04fd430c8';
 
 const ArticleList = () => {
@@ -41,25 +38,19 @@ const ArticleList = () => {
   const [likes, setLikes] = useState({});
   const [dislikes, setDislikes] = useState({});
   const [user, setUser] = useState(null);
-  const navigate = useNavigate();
 
-  // On mount, check if user is logged in
   useEffect(() => {
     const fetchUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         setUser(user);
-      } else {
-        navigate('/login');
       }
     };
     fetchUser();
-  }, [navigate]);
+  }, []);
 
-  // Fetch vote counts for current articles from Supabase
   useEffect(() => {
     const fetchVotes = async () => {
-      // Compute an array of articleUUIDs for the current articles
       const articleUUIDs = currentArticles.map((article) =>
         isValidUUID(article.id) ? article.id : uuidv5(article.id.toString(), ARTICLE_NAMESPACE)
       );
@@ -88,34 +79,30 @@ const ArticleList = () => {
 
   const handleVote = async (articleUUID, type) => {
     if (!user) {
-      console.error('User not logged in');
+      alert('გთხოვთ შეიყვანეთ ან შექმენით ანგარიში ხმის მისაცემად!');
       return;
     }
-    
-    // First, check if the user has already voted for this article.
+
     const { data: existingVote, error: selectError } = await supabase
       .from('likes')
       .select('*')
       .eq('article_id', articleUUID)
       .eq('user_id', user.id)
-      .maybeSingle();  // maybeSingle() returns null if no record exists
-    
+      .maybeSingle();
+
     if (selectError) {
       console.error('Error checking for existing vote:', selectError.message);
       return;
     }
-    
+
     if (existingVote) {
-      // The user has already voted on this article.
       console.log('User has already voted on this article.');
       return;
     }
-    
-    // If no vote exists, create a new record.
-    // Each user can only vote once per article so we use 1 for the selected vote type.
+
     const newLikeCount = type === 'like' ? 1 : 0;
     const newDislikeCount = type === 'dislike' ? 1 : 0;
-    
+
     const { error } = await supabase
       .from('likes')
       .insert({
@@ -124,11 +111,10 @@ const ArticleList = () => {
         likes: newLikeCount,
         dislikes: newDislikeCount,
       });
-    
+
     if (error) {
       console.error('Error while inserting vote:', error.message);
     } else {
-      // Optionally update local state to reflect that the user has voted.
       if (type === 'like') {
         setLikes({ ...likes, [articleUUID]: 1 });
       } else {
@@ -137,13 +123,11 @@ const ArticleList = () => {
       console.log('Vote recorded.');
     }
   };
-  
 
   return (
     <div>
       <div style={{ marginBottom: '100px' }}>
         {currentArticles.map((article) => {
-          // Compute a stable UUID for each article.
           const articleUUID = isValidUUID(article.id) ? article.id : uuidv5(article.id.toString(), ARTICLE_NAMESPACE);
           const colorIndex = getColorIndex(articleUUID);
           return (
@@ -163,13 +147,13 @@ const ArticleList = () => {
                 <p className="webComponent-description">{article.description}</p>
                 <div className="btnMargin">
                   <Link to={`/article/${articleUUID}`} className="webComponent-button">
-                    🗞️ იხილეთ მეტი
+                    🗞️ View More
                   </Link>
                   <button style={{ backgroundColor: '#5b744d', borderColor: '#86947e' }} className="webComponent-button" onClick={() => handleVote(articleUUID, 'like')}>
-                    💚 მომწონს {likes[articleUUID] || 0}
+                    💚 Like {likes[articleUUID] || 0}
                   </button>
                   <button style={{ backgroundColor: '#3d2929', borderColor: '#856161' }} className="webComponent-button" onClick={() => handleVote(articleUUID, 'dislike')}>
-                    💔 არ მომწონს {dislikes[articleUUID] || 0}
+                    💔 Dislike {dislikes[articleUUID] || 0}
                   </button>
                 </div>
               </div>
