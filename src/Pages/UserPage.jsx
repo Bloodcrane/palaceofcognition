@@ -28,7 +28,7 @@ const UserPage = () => {
             <div className="profileIcon">
             </div>
             <h2>{user.email}</h2>
-            <p>თქვენ პროფილის გვერდი</p>
+            <p>თქვენი პროფილის გვერდი</p>
             </div>
         ) : (
             <p>იტვირთება...</p>

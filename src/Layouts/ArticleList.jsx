@@ -49,80 +49,82 @@ const ArticleList = () => {
     fetchUser();
   }, []);
 
-  useEffect(() => {
-    const fetchVotes = async () => {
-      const articleUUIDs = currentArticles.map((article) =>
-        isValidUUID(article.id) ? article.id : uuidv5(article.id.toString(), ARTICLE_NAMESPACE)
-      );
+useEffect(() => {
+  const fetchVotes = async () => {
+    const articleUUIDs = currentArticles.map((article) =>
+      isValidUUID(article.id) ? article.id : uuidv5(article.id.toString(), ARTICLE_NAMESPACE)
+    );
 
-      const { data, error } = await supabase
-        .from('likes')
-        .select('article_id, likes, dislikes')
-        .in('article_id', articleUUIDs);
-
-      if (error) {
-        console.error('Error fetching votes:', error.message);
-      } else if (data) {
-        const likesMap = {};
-        const dislikesMap = {};
-        data.forEach((record) => {
-          likesMap[record.article_id] = record.likes;
-          dislikesMap[record.article_id] = record.dislikes;
-        });
-        setLikes(likesMap);
-        setDislikes(dislikesMap);
-      }
-    };
-
-    fetchVotes();
-  }, [currentArticles]);
-
-  const handleVote = async (articleUUID, type) => {
-    if (!user) {
-      alert('გთხოვთ შეიყვანეთ ან შექმენით ანგარიში ხმის მისაცემად!');
-      return;
-    }
-
-    const { data: existingVote, error: selectError } = await supabase
+    const { data, error } = await supabase
       .from('likes')
-      .select('*')
-      .eq('article_id', articleUUID)
-      .eq('user_id', user.id)
-      .maybeSingle();
-
-    if (selectError) {
-      console.error('Error checking for existing vote:', selectError.message);
-      return;
-    }
-
-    if (existingVote) {
-      console.log('User has already voted on this article.');
-      return;
-    }
-
-    const newLikeCount = type === 'like' ? 1 : 0;
-    const newDislikeCount = type === 'dislike' ? 1 : 0;
-
-    const { error } = await supabase
-      .from('likes')
-      .insert({
-        article_id: articleUUID,
-        user_id: user.id,
-        likes: newLikeCount,
-        dislikes: newDislikeCount,
-      });
+      .select('article_id, likes, dislikes')
+      .in('article_id', articleUUIDs);
 
     if (error) {
-      console.error('Error while inserting vote:', error.message);
-    } else {
-      if (type === 'like') {
-        setLikes({ ...likes, [articleUUID]: 1 });
-      } else {
-        setDislikes({ ...dislikes, [articleUUID]: 1 });
-      }
-      console.log('Vote recorded.');
+      console.error('Error fetching votes:', error.message);
+      return;
     }
+
+    const likesMap = {};
+    const dislikesMap = {};
+
+    data.forEach(({ article_id, likes, dislikes }) => {
+      likesMap[article_id] = (likesMap[article_id] || 0) + likes;
+      dislikesMap[article_id] = (dislikesMap[article_id] || 0) + dislikes;
+    });
+
+    setLikes(likesMap);
+    setDislikes(dislikesMap);
   };
+
+  fetchVotes();
+}, [currentArticles]);
+
+
+const handleVote = async (articleUUID, type) => {
+  if (!user) {
+    alert('გთხოვთ შეიყვანეთ ან შექმენით ანგარიში ხმის მისაცემად!');
+    return;
+  }
+
+  const { data: existingVote, error: selectError } = await supabase
+    .from('likes')
+    .select('*')
+    .eq('article_id', articleUUID)
+    .eq('user_id', user.id)
+    .maybeSingle();
+
+  if (selectError) {
+    console.error('Error checking for existing vote:', selectError.message);
+    return;
+  }
+
+  if (existingVote) {
+    console.log('User has already voted on this article.');
+    return;
+  }
+
+  const newLikeCount = type === 'like' ? 1 : 0;
+  const newDislikeCount = type === 'dislike' ? 1 : 0;
+
+  const { error } = await supabase
+    .from('likes')
+    .insert({
+      article_id: articleUUID,
+      user_id: user.id,
+      likes: newLikeCount,
+      dislikes: newDislikeCount,
+    });
+
+  if (error) {
+    console.error('Error while inserting vote:', error.message);
+  } else {
+    setLikes((prev) => ({ ...prev, [articleUUID]: (prev[articleUUID] || 0) + newLikeCount }));
+    setDislikes((prev) => ({ ...prev, [articleUUID]: (prev[articleUUID] || 0) + newDislikeCount }));
+    console.log('Vote recorded.');
+  }
+};
+
 
   return (
     <div>

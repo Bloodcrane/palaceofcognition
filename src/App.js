@@ -4,8 +4,8 @@ import supabase from './supabase';
 import LoaderLayout from './Layouts/Loader';
 import './App.css';
 
-import Login from './Pages/Login';
-import SignUp from './Pages/SignUp';
+const Login = lazy(() => import('./Pages/Login'));
+const SignUp = lazy(() => import('./Pages/SignUp'));
 
 const AboutPage = lazy(() => import('./Pages/AboutPage'));
 const ArticlePage = lazy(() => import('./Pages/ArticlePage'));
