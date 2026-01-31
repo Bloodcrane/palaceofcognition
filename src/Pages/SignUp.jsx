@@ -4,7 +4,7 @@ import { account } from '../appwrite';
 import { ID } from 'appwrite';
 import './LogInUp.css';
 
-const SignUp = () => {
+const SignUp = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -15,13 +15,16 @@ const SignUp = () => {
     const checkUser = async () => {
       try {
         const user = await account.get();
-        if (user) navigate('/user');
+        if (user) {
+          if (onLogin) onLogin(user);
+          navigate('/user');
+        }
       } catch (error) {
         // Not logged in
       }
     };
     checkUser();
-  }, [navigate]);
+  }, [navigate, onLogin]);
 
   const handleSignInRedirect = () => {
     navigate('/login');

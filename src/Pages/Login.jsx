@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { account } from '../appwrite';
 import './LogInUp.css';
 
-const Login = () => {
+const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
@@ -14,6 +14,7 @@ const Login = () => {
       try {
         const user = await account.get();
         if (user) {
+          if (onLogin) onLogin(user);
           navigate('/user');
         }
       } catch (error) {
@@ -21,7 +22,7 @@ const Login = () => {
       }
     };
     checkUser();
-  }, [navigate]);
+  }, [navigate, onLogin]);
 
   const handleSignUpRedirect = () => {
     navigate('/signup');
@@ -32,6 +33,8 @@ const Login = () => {
 
     try {
       await account.createEmailPasswordSession(email, password);
+      const user = await account.get();
+      if (onLogin) onLogin(user);
       navigate('/');
     } catch (error) {
       setError(error.message);
