@@ -1,4 +1,3 @@
-import HeaderLayout from "../Layouts/Header"
 import MovieList from "../Layouts/MovieList";
 
 const MoviePage = () => {
@@ -7,17 +6,14 @@ const MoviePage = () => {
     };
 
     return (
-    <div>
-        <main>
-            <header>
-                <HeaderLayout showMain={true} showBooks={true} showMovies={false} showArticles={true} />
-            </header>
-            <h1 style={Style}>კინოკლუბი</h1>
+        <div>
+            <main>
+                <h1 style={Style}>კინოკლუბი</h1>
 
-            {/* ფილმები */}
-            <MovieList />
-        </main>
-    </div>
+                {/* ფილმები */}
+                <MovieList />
+            </main>
+        </div>
     )
 }
 

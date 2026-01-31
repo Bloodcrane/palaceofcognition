@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { account } from '../appwrite';
 import { ID } from 'appwrite';
-import HeaderLayout from '../Layouts/Header';
 
 const SignUp = () => {
   const [email, setEmail] = useState('');
@@ -39,7 +38,6 @@ const SignUp = () => {
 
   return (
     <div>
-      <HeaderLayout />
       <div className='loginPage'>
         <h2>ახალი ანგარიშის შექმნა</h2>
         {error && <div style={{ color: 'red' }}>{error}</div>}

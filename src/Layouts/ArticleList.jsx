@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { account, databases } from '../appwrite';
 import { ID, Query } from 'appwrite';
-import { v5 as uuidv5 } from 'uuid';
 import articles from '../Articles.json';
 
 const colors = ['#6b7a6f', '#775a5a', '#634875', '#647d94'];
@@ -11,19 +11,16 @@ const articlesPerPage = 3;
 // Placeholder Database ID - Replace with actual ID from Appwrite Console
 const VOTES_DATABASE_ID = '697e6e0200022dd882b7';
 const VOTES_COLLECTION_ID = 'user_votes';
-const ARTICLE_NAMESPACE = '6ba7b810-9dad-11d1-80b4-00c04fd430c8';
-
-function isValidUUID(str) {
-  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(str);
-}
 
 function getColorIndex(str) {
   let hash = 0;
+  if (!str) return 0;
   for (let i = 0; i < str.length; i++) {
     hash += str.charCodeAt(i);
   }
   return hash % colors.length;
 }
+
 
 const ArticleList = () => {
   const location = useLocation();
@@ -64,36 +61,24 @@ const ArticleList = () => {
       const dislikesMap = {};
 
       try {
-        // We need to fetch votes for EACH article. 
-        // Ideally, we'd use a single query with OR logic, but for simplicity/limitations, we'll iterate.
-        // Optimally: databases.listDocuments(DB, COL, [Query.equal('post_id', [id1, id2...])]) if supported or multiple requests.
-
         const promises = currentArticles.map(async (article) => {
-          const articleUUID = isValidUUID(article.id) ? article.id : uuidv5(article.id.toString(), ARTICLE_NAMESPACE);
-
-          // Get all votes for this article
-          // Note: This matches the user's logic request to "count documents"
-          // For a production app with many votes, aggregation is better, but this follows the instruction:
-          // "Total Likes: Count documents where post_id == 'XYZ' and vote_type == 1"
-
-          // Fetching all votes might be heavy. We will limit. 
-          // BUT: Appwrite listDocuments returns 'total'. We can filter by post_id and vote_type.
+          const articleId = article.id.toString();
 
           const [likesData, dislikesData] = await Promise.all([
             databases.listDocuments(VOTES_DATABASE_ID, VOTES_COLLECTION_ID, [
-              Query.equal('post_id', articleUUID),
+              Query.equal('post_id', articleId),
               Query.equal('vote_type', 1),
-              Query.limit(1) // We only need the 'total' count
+              Query.limit(1)
             ]),
             databases.listDocuments(VOTES_DATABASE_ID, VOTES_COLLECTION_ID, [
-              Query.equal('post_id', articleUUID),
+              Query.equal('post_id', articleId),
               Query.equal('vote_type', -1),
               Query.limit(1)
             ])
           ]);
 
-          likesMap[articleUUID] = likesData.total;
-          dislikesMap[articleUUID] = dislikesData.total;
+          likesMap[articleId] = likesData.total;
+          dislikesMap[articleId] = dislikesData.total;
         });
 
         await Promise.all(promises);
@@ -102,7 +87,6 @@ const ArticleList = () => {
         setDislikes(dislikesMap);
 
       } catch (error) {
-        // Fail silently or log if needed, as placeholder ID will cause errors initially
         console.error("Error fetching votes:", error);
       }
     };
@@ -111,21 +95,18 @@ const ArticleList = () => {
   }, [currentArticles]);
 
 
-  const handleVote = async (articleUUID, type) => {
+  const handleVote = async (articleId, type) => {
     if (!user) {
       alert('გთხოვთ შეიყვანეთ ან შექმენით ანგარიში ხმის მისაცემად!');
       return;
     }
-
-    // Optimistic UI Update (Optional, simpler to wait for refresh or just increment local state temporarily)
-    // For now, let's implement the logic and refetch or manually adjust state.
 
     const voteValue = type === 'like' ? 1 : -1;
 
     try {
       // 1. Check if user already voted
       const existing = await databases.listDocuments(VOTES_DATABASE_ID, VOTES_COLLECTION_ID, [
-        Query.equal('post_id', articleUUID),
+        Query.equal('post_id', articleId),
         Query.equal('user_id', user.$id)
       ]);
 
@@ -139,9 +120,9 @@ const ArticleList = () => {
 
           // Update State Locally
           if (voteValue === 1) {
-            setLikes(prev => ({ ...prev, [articleUUID]: Math.max(0, (prev[articleUUID] || 0) - 1) }));
+            setLikes(prev => ({ ...prev, [articleId]: Math.max(0, (prev[articleId] || 0) - 1) }));
           } else {
-            setDislikes(prev => ({ ...prev, [articleUUID]: Math.max(0, (prev[articleUUID] || 0) - 1) }));
+            setDislikes(prev => ({ ...prev, [articleId]: Math.max(0, (prev[articleId] || 0) - 1) }));
           }
 
         } else {
@@ -150,49 +131,75 @@ const ArticleList = () => {
 
           // Update State Locally
           if (voteValue === 1) {
-            setLikes(prev => ({ ...prev, [articleUUID]: (prev[articleUUID] || 0) + 1 }));
-            setDislikes(prev => ({ ...prev, [articleUUID]: Math.max(0, (prev[articleUUID] || 0) - 1) }));
+            setLikes(prev => ({ ...prev, [articleId]: (prev[articleId] || 0) + 1 }));
+            setDislikes(prev => ({ ...prev, [articleId]: Math.max(0, (prev[articleId] || 0) - 1) }));
           } else {
-            setLikes(prev => ({ ...prev, [articleUUID]: Math.max(0, (prev[articleUUID] || 0) - 1) }));
-            setDislikes(prev => ({ ...prev, [articleUUID]: (prev[articleUUID] || 0) + 1 }));
+            setLikes(prev => ({ ...prev, [articleId]: Math.max(0, (prev[articleId] || 0) - 1) }));
+            setDislikes(prev => ({ ...prev, [articleId]: (prev[articleId] || 0) + 1 }));
           }
         }
       } else {
         // 2. Create new vote
         await databases.createDocument(VOTES_DATABASE_ID, VOTES_COLLECTION_ID, ID.unique(), {
-          post_id: articleUUID,
+          post_id: articleId,
           user_id: user.$id,
           vote_type: voteValue
         });
 
         // Update State Locally
         if (voteValue === 1) {
-          setLikes(prev => ({ ...prev, [articleUUID]: (prev[articleUUID] || 0) + 1 }));
+          setLikes(prev => ({ ...prev, [articleId]: (prev[articleId] || 0) + 1 }));
         } else {
-          setDislikes(prev => ({ ...prev, [articleUUID]: (prev[articleUUID] || 0) + 1 }));
+          setDislikes(prev => ({ ...prev, [articleId]: (prev[articleId] || 0) + 1 }));
         }
       }
     } catch (error) {
       console.error("Voting failed", error);
-      alert("Vote failed. Please check console (Database ID might be missing).");
+      alert("Vote failed. Please check console.");
     }
   };
 
 
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2
+      }
+    }
+  };
+
+  const item = {
+    hidden: { opacity: 0, y: 50 },
+    show: { opacity: 1, y: 0 }
+  };
+
   return (
     <div>
-      <div style={{ marginBottom: '100px' }}>
+      <motion.div
+        style={{ marginBottom: '100px' }}
+        variants={container}
+        initial="hidden"
+        animate="show"
+      >
         {currentArticles.map((article) => {
-          const articleUUID = isValidUUID(article.id) ? article.id : uuidv5(article.id.toString(), ARTICLE_NAMESPACE);
-          const colorIndex = getColorIndex(articleUUID);
+          const articleId = article.id.toString();
+          const colorIndex = getColorIndex(articleId);
           return (
-            <div
-              key={articleUUID}
+            <motion.div
+              key={articleId}
+              variants={item}
               className="webComponent"
               style={{
                 backgroundColor: colors[colorIndex],
                 border: `2px solid ${colors[colorIndex]}`,
                 boxShadow: `0px 0px 30px ${colors[colorIndex]}`,
+              }}
+              whileHover={{
+                scale: 1.02,
+                boxShadow: `0px 0px 50px ${colors[colorIndex]}`,
+                transition: { duration: 0.3 }
               }}
             >
               <div className="webComponent-inside-container">
@@ -201,21 +208,21 @@ const ArticleList = () => {
                 <label className="webComponent-author">{article.author}</label>
                 <p className="webComponent-description">{article.description}</p>
                 <div className="btnMargin">
-                  <Link to={`/article/${articleUUID}`} className="webComponent-button">
+                  <Link to={`/article/${articleId}`} className="webComponent-button">
                     🗞️ View More
                   </Link>
-                  <button style={{ backgroundColor: '#5b744d', borderColor: '#86947e' }} className="webComponent-button" onClick={() => handleVote(articleUUID, 'like')}>
-                    💚 Like {likes[articleUUID] || 0}
+                  <button style={{ backgroundColor: '#5b744d', borderColor: '#86947e' }} className="webComponent-button" onClick={() => handleVote(articleId, 'like')}>
+                    💚 Like {likes[articleId] || 0}
                   </button>
-                  <button style={{ backgroundColor: '#3d2929', borderColor: '#856161' }} className="webComponent-button" onClick={() => handleVote(articleUUID, 'dislike')}>
-                    💔 Dislike {dislikes[articleUUID] || 0}
+                  <button style={{ backgroundColor: '#3d2929', borderColor: '#856161' }} className="webComponent-button" onClick={() => handleVote(articleId, 'dislike')}>
+                    💔 Dislike {dislikes[articleId] || 0}
                   </button>
                 </div>
               </div>
-            </div>
+            </motion.div>
           );
         })}
-      </div>
+      </motion.div>
 
       <div
         className="pagination-container"

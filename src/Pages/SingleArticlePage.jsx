@@ -3,30 +3,12 @@ import { useParams } from 'react-router-dom';
 import articles from '../Articles.json';
 import { useMediaQuery } from 'react-responsive';
 import { Helmet } from 'react-helmet';
-import HeaderLayout from '../Layouts/Header';
-import { v5 as uuidv5 } from 'uuid';
-
-// Use the same namespace as in your article list component
-const ARTICLE_NAMESPACE = '6ba7b810-9dad-11d1-80b4-00c04fd430c8';
-
-// Helper to check if a string is a valid UUID
-function isValidUUID(str) {
-  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(str);
-}
 
 const SingleArticlePage = () => {
-  // The URL parameter now holds the computed UUID from the article list.
-  const { title: articleUUID } = useParams();
-  console.log('Article UUID from URL:', articleUUID);
+  const { title: articleId } = useParams();
 
-  // Find the matching article by computing its stable UUID.
-  const article = articles.find((article) => {
-    // If article.id is already a valid UUID, use it; otherwise, compute a UUID using uuidv5.
-    const computedUUID = isValidUUID(article.id.toString())
-      ? article.id.toString()
-      : uuidv5(article.id.toString(), ARTICLE_NAMESPACE);
-    return computedUUID === articleUUID;
-  });
+  // Find the matching article by id.
+  const article = articles.find((a) => a.id.toString() === articleId);
 
   const [fullText, setFullText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -78,9 +60,6 @@ const SingleArticlePage = () => {
     <div>
       {generateMetaTags()}
       <div>
-        <header>
-          <HeaderLayout showMain={false} showBooks={true} showMovies={true} showArticles={true} />
-        </header>
         <div
           className="article-container"
           style={{
@@ -115,19 +94,19 @@ const SingleArticlePage = () => {
             {isLoading
               ? 'Loading full text...'
               : error
-              ? 'Error loading full text'
-              : (
-                <p
-                  className="fullText"
-                  style={{
-                    maxWidth: isDesktopOrLaptop ? '800px' : '400px',
-                    margin: '0 auto',
-                    fontSize: '23px'
-                  }}
-                >
-                  {fullText}
-                </p>
-              )}
+                ? 'Error loading full text'
+                : (
+                  <p
+                    className="fullText"
+                    style={{
+                      maxWidth: isDesktopOrLaptop ? '800px' : '400px',
+                      margin: '0 auto',
+                      fontSize: '23px'
+                    }}
+                  >
+                    {fullText}
+                  </p>
+                )}
           </div>
         </div>
       </div>
