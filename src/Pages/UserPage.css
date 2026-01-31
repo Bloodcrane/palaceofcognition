@@ -5,11 +5,12 @@
     min-height: 100vh;
     background-color: #161616;
     padding-bottom: 50px;
+    padding-top: 50px;
 }
 
 .profileContainer {
     text-align: center;
-    background-color: #131212;
+    background-color: #2b2b2b;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);

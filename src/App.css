@@ -36,7 +36,7 @@ body {
 }
 
 .content-container {
-  padding-top: 120px;
+  padding-top: 50px;
 }
 
 .article-container {
@@ -165,7 +165,7 @@ body {
   color: rgba(255, 255, 255, 0.836);
   margin-left: 15px;
   position: absolute;
-  top: 0;
+  top: 15%;
   font-family: "IM Fell English", serif;
   font-weight: 400;
   font-style: normal;
@@ -267,8 +267,6 @@ body {
   flex-direction: row;
   float: center;
   text-align: center;
-  margin-top: 10px;
-  margin-bottom: 10px;
 }
 
 
