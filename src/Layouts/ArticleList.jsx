@@ -11,6 +11,7 @@ const articlesPerPage = 3;
 // Placeholder Database ID - Replace with actual ID from Appwrite Console
 const VOTES_DATABASE_ID = '697e6e0200022dd882b7';
 const VOTES_COLLECTION_ID = 'user_votes';
+const ARTICLES_COLLECTION_ID = 'articles';
 
 function getColorIndex(str) {
   let hash = 0;
@@ -21,36 +22,63 @@ function getColorIndex(str) {
   return hash % colors.length;
 }
 
-
 const ArticleList = () => {
+  const [allArticles, setAllArticles] = useState([]);
+  const [likes, setLikes] = useState({});
+  const [dislikes, setDislikes] = useState({});
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const currentPage = parseInt(params.get('page')) || 1;
 
+  useEffect(() => {
+    const fetchAllData = async () => {
+      setIsLoading(true);
+      try {
+        // 1. Fetch user
+        const currentUser = await account.get();
+        setUser(currentUser);
+      } catch (e) { }
+
+      try {
+        // 2. Fetch dynamic articles from Appwrite
+        const response = await databases.listDocuments(
+          VOTES_DATABASE_ID,
+          ARTICLES_COLLECTION_ID,
+          [Query.orderDesc('$createdAt')]
+        );
+
+        const dynamicMapped = response.documents.map(doc => ({
+          id: doc.$id,
+          title: doc.title,
+          description: doc.description,
+          imageUrl: doc.imageUrl,
+          author: doc.author,
+          isDynamic: true
+        }));
+
+        // 3. Merge with static JSON articles
+        setAllArticles([...dynamicMapped, ...articles]);
+      } catch (error) {
+        console.error("Error fetching articles:", error);
+        setAllArticles(articles); // Fallback to static
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAllData();
+  }, []);
+
+  const totalPages = Math.ceil(allArticles.length / articlesPerPage);
   const startIndex = (currentPage - 1) * articlesPerPage;
-  const endIndex = startIndex + articlesPerPage;
-  const currentArticles = articles.slice(startIndex, endIndex);
-  const totalPages = Math.ceil(articles.length / articlesPerPage);
+  const currentArticles = allArticles.slice(startIndex, startIndex + articlesPerPage);
 
   const handlePageChange = () => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
   };
-
-  const [likes, setLikes] = useState({});
-  const [dislikes, setDislikes] = useState({});
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const user = await account.get();
-        setUser(user);
-      } catch (error) {
-        // Not logged in
-      }
-    };
-    fetchUser();
-  }, []);
 
   // Fetch votes for current articles
   useEffect(() => {
@@ -82,18 +110,15 @@ const ArticleList = () => {
         });
 
         await Promise.all(promises);
-
         setLikes(likesMap);
         setDislikes(dislikesMap);
-
       } catch (error) {
         console.error("Error fetching votes:", error);
       }
     };
 
     fetchVotes();
-  }, [currentArticles]);
-
+  }, [currentArticles.map(a => a.id).join(',')]); // Stable dependency
 
   const handleVote = async (articleId, type) => {
     if (!user) {
@@ -104,9 +129,8 @@ const ArticleList = () => {
     const voteValue = type === 'like' ? 1 : -1;
 
     try {
-      // 1. Check if user already voted
       const existing = await databases.listDocuments(VOTES_DATABASE_ID, VOTES_COLLECTION_ID, [
-        Query.equal('post_id', articleId),
+        Query.equal('post_id', articleId.toString()),
         Query.equal('user_id', user.$id)
       ]);
 
@@ -115,21 +139,14 @@ const ArticleList = () => {
         const currentVoteType = existing.documents[0].vote_type;
 
         if (currentVoteType === voteValue) {
-          // Remove vote if clicking the same button again
           await databases.deleteDocument(VOTES_DATABASE_ID, VOTES_COLLECTION_ID, docId);
-
-          // Update State Locally
           if (voteValue === 1) {
             setLikes(prev => ({ ...prev, [articleId]: Math.max(0, (prev[articleId] || 0) - 1) }));
           } else {
             setDislikes(prev => ({ ...prev, [articleId]: Math.max(0, (prev[articleId] || 0) - 1) }));
           }
-
         } else {
-          // Update vote if switching from like to dislike or vice versa
           await databases.updateDocument(VOTES_DATABASE_ID, VOTES_COLLECTION_ID, docId, { vote_type: voteValue });
-
-          // Update State Locally
           if (voteValue === 1) {
             setLikes(prev => ({ ...prev, [articleId]: (prev[articleId] || 0) + 1 }));
             setDislikes(prev => ({ ...prev, [articleId]: Math.max(0, (prev[articleId] || 0) - 1) }));
@@ -139,14 +156,11 @@ const ArticleList = () => {
           }
         }
       } else {
-        // 2. Create new vote
         await databases.createDocument(VOTES_DATABASE_ID, VOTES_COLLECTION_ID, ID.unique(), {
-          post_id: articleId,
+          post_id: articleId.toString(),
           user_id: user.$id,
           vote_type: voteValue
         });
-
-        // Update State Locally
         if (voteValue === 1) {
           setLikes(prev => ({ ...prev, [articleId]: (prev[articleId] || 0) + 1 }));
         } else {
@@ -155,18 +169,15 @@ const ArticleList = () => {
       }
     } catch (error) {
       console.error("Voting failed", error);
-      alert("Vote failed. Please check console.");
+      alert("Vote failed.");
     }
   };
-
 
   const container = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.2
-      }
+      transition: { staggerChildren: 0.2 }
     }
   };
 
@@ -174,6 +185,8 @@ const ArticleList = () => {
     hidden: { opacity: 0, y: 50 },
     show: { opacity: 1, y: 0 }
   };
+
+  if (isLoading) return <div style={{ textAlign: 'center', marginTop: '100px' }}>იტვირთება...</div>;
 
   return (
     <div>
@@ -211,10 +224,18 @@ const ArticleList = () => {
                   <Link to={`/article/${articleId}`} className="webComponent-button">
                     🗞️ View More
                   </Link>
-                  <button style={{ backgroundColor: '#5b744d', borderColor: '#86947e' }} className="webComponent-button" onClick={() => handleVote(articleId, 'like')}>
+                  <button
+                    style={{ backgroundColor: '#5b744d', borderColor: '#86947e' }}
+                    className="webComponent-button"
+                    onClick={() => handleVote(articleId, 'like')}
+                  >
                     💚 Like {likes[articleId] || 0}
                   </button>
-                  <button style={{ backgroundColor: '#3d2929', borderColor: '#856161' }} className="webComponent-button" onClick={() => handleVote(articleId, 'dislike')}>
+                  <button
+                    style={{ backgroundColor: '#3d2929', borderColor: '#856161' }}
+                    className="webComponent-button"
+                    onClick={() => handleVote(articleId, 'dislike')}
+                  >
                     💔 Dislike {dislikes[articleId] || 0}
                   </button>
                 </div>
@@ -244,12 +265,9 @@ const ArticleList = () => {
         >
           Next
         </Link>
-        <br />
-        <br />
-        <br />
-        <span style={{ textAlign: 'center' }}>
+        <div style={{ marginTop: '10px', textAlign: 'center', opacity: 0.6 }}>
           Page {currentPage} of {totalPages}
-        </span>
+        </div>
       </div>
     </div>
   );

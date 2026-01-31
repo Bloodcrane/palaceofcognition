@@ -21,6 +21,7 @@ const UserPage = lazy(() => import('./Pages/UserPage'));
 const AnimatedRoutes = () => {
   const location = useLocation();
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     client.ping();
@@ -30,10 +31,16 @@ const AnimatedRoutes = () => {
         setUser(user);
       } catch (error) {
         setUser(null);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchUser();
   }, []);
+
+  if (isLoading) {
+    return <LoaderLayout />;
+  }
 
   return (
     <div className="content-container">

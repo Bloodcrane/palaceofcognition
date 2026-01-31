@@ -8,14 +8,23 @@
     padding-top: 50px;
 }
 
+.user-container {
+    width: 90%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .profileContainer {
     text-align: center;
     background-color: #2b2b2b;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     margin-top: 20px;
-    width: 300px;
+    width: 350px;
+    border: 1px solid #444;
 }
 
 .profileIcon {
@@ -29,22 +38,206 @@
     margin: 0 auto;
 }
 
-h2 {
-    margin: 10px 0;
-    font-size: 1.5rem;
-    color: #ffffff;
+.post-toggle-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #598eff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
 }
 
-p {
+.post-toggle-btn:hover {
+    background-color: #4a7be6;
+}
+
+/* Upload Section */
+.upload-section {
+    margin-top: 40px;
+    background-color: #1e1e1e;
+    padding: 30px;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 700px;
+    border: 1px solid #333;
+}
+
+.upload-section h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #598eff;
+}
+
+.upload-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.upload-form input,
+.upload-form textarea {
+    padding: 12px;
+    background-color: #2b2b2b;
+    border: 1px solid #444;
+    border-radius: 5px;
+    color: white;
+    font-family: inherit;
+}
+
+.full-text-input {
+    min-height: 200px;
+}
+
+.file-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.file-input-container label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.captcha-container {
+    background-color: #252525;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.captcha-container p {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.submit-article-btn {
+    padding: 15px;
+    background-color: #5b744d;
+    color: white;
+    border: none;
+    border-radius: 5px;
     font-size: 1rem;
-    color: #cecece;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
+.submit-article-btn:disabled {
+    background-color: #444;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.limit-warning {
+    color: #ff6b6b;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+/* Management & History Sections */
+.management-section,
+.history-section {
+    width: 100%;
+    margin-top: 60px;
+}
+
+.management-section h3,
+.history-section h3 {
+    text-align: left;
+    border-bottom: 1px solid #ffffff33;
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+    font-size: 1.4rem;
+}
+
+.empty-msg {
+    opacity: 0.6;
+    margin-top: 20px;
+}
+
+.articles-manage-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.manage-card {
+    background-color: #1e1e1e;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    height: 120px;
+    border: 1px solid #333;
+    transition: border-color 0.2s;
+}
+
+.manage-card:hover {
+    border-color: #598eff;
+}
+
+.manage-card-img {
+    width: 120px;
+    background-size: cover;
+    background-position: center;
+}
+
+.manage-card-info {
+    flex: 1;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.manage-card-info h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.manage-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.edit-btn,
+.delete-btn {
+    flex: 1;
+    padding: 6px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.edit-btn {
+    background-color: #2b2b2b;
+    color: #cecece;
+    border-color: #444;
+}
+
+.delete-btn {
+    background-color: #3d2929;
+    color: #ffadad;
+    border-color: #664444;
+}
+
+.delete-btn:hover {
+    background-color: #523636;
+}
+
+/* History Grid */
 .votes-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 20px;
-    margin-top: 20px;
 }
 
 .vote-card {
@@ -104,4 +297,29 @@ p {
 
 .remove-vote-btn:hover {
     background-color: #523636;
+}
+
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.cancel-btn {
+    background: transparent;
+    border: 1px solid #775a5a;
+    color: #cecece;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cancel-btn:hover {
+    background: #775a5a;
+    color: white;
+}
+
+.profile-actions {
+    margin-top: 15px;
 }

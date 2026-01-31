@@ -3,17 +3,67 @@ import { useParams } from 'react-router-dom';
 import articles from '../Articles.json';
 import { useMediaQuery } from 'react-responsive';
 import { Helmet } from 'react-helmet';
+import { databases } from '../appwrite';
+
+const VOTES_DATABASE_ID = '697e6e0200022dd882b7';
+const ARTICLES_COLLECTION_ID = 'articles';
 
 const SingleArticlePage = () => {
   const { title: articleId } = useParams();
 
-  // Find the matching article by id.
-  const article = articles.find((a) => a.id.toString() === articleId);
-
+  const [article, setArticle] = useState(null);
   const [fullText, setFullText] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const isDesktopOrLaptop = useMediaQuery({ query: '(min-width: 1224px)' });
+
+  useEffect(() => {
+    const loadArticle = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        // 1. Try finding in local JSON
+        const staticArticle = articles.find((a) => a.id.toString() === articleId);
+
+        if (staticArticle) {
+          setArticle(staticArticle);
+          // Fetch full text for static article (it's usually a URL/path)
+          if (staticArticle.fullText) {
+            const response = await fetch(staticArticle.fullText);
+            if (!response.ok) throw new Error("Failed to fetch static text");
+            const text = await response.text();
+            setFullText(text);
+          }
+        } else {
+          // 2. Try fetching from Appwrite
+          const dynamicArticle = await databases.getDocument(
+            VOTES_DATABASE_ID,
+            ARTICLES_COLLECTION_ID,
+            articleId
+          );
+
+          if (dynamicArticle) {
+            setArticle({
+              title: dynamicArticle.title,
+              author: dynamicArticle.author,
+              imageUrl: dynamicArticle.imageUrl,
+              description: dynamicArticle.description
+            });
+            // For dynamic articles, fullText is stored directly in the DB
+            setFullText(dynamicArticle.fullText);
+          }
+        }
+      } catch (err) {
+        console.error("Error loading article:", err);
+        setError("სტატიის ჩატვირთვა ვერ მოხერხდა.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadArticle();
+  }, [articleId]);
 
   const generateMetaTags = () => {
     if (article) {
@@ -30,30 +80,12 @@ const SingleArticlePage = () => {
     return null;
   };
 
-  useEffect(() => {
-    if (article && article.fullText) {
-      setIsLoading(true);
-      const fetchFullText = async () => {
-        try {
-          const response = await fetch(article.fullText);
-          if (!response.ok) {
-            throw new Error(`Error fetching full text: ${response.statusText}`);
-          }
-          const text = await response.text();
-          setFullText(text);
-        } catch (error) {
-          console.error('Error fetching full text:', error);
-          setError(error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-      fetchFullText();
-    }
-  }, [article]);
+  if (isLoading) {
+    return <div className="loading-container">იტვირთება...</div>;
+  }
 
-  if (!article) {
-    return <div>Article not found</div>;
+  if (error || !article) {
+    return <div className="error-container">{error || "სტატია ვერ მოიძებნა"}</div>;
   }
 
   return (
@@ -76,7 +108,8 @@ const SingleArticlePage = () => {
               marginTop: "60px",
               textShadow: '2px 2px 5px black',
               backgroundImage: 'linear-gradient(#131313, #0c0c0c)',
-              textAlign: 'center'
+              textAlign: 'center',
+              width: '100%'
             }}
           >
             <h1>{article.title}</h1>
@@ -86,27 +119,26 @@ const SingleArticlePage = () => {
               alt=""
               style={{
                 width: "auto",
-                height: "300px",
+                height: isDesktopOrLaptop ? "400px" : "250px",
                 borderRadius: "10px",
-                boxShadow: "0px 5px 5px #00000099"
+                boxShadow: "0px 5px 15px rgba(0,0,0,0.5)",
+                maxWidth: '90%'
               }}
             />
-            {isLoading
-              ? 'Loading full text...'
-              : error
-                ? 'Error loading full text'
-                : (
-                  <p
-                    className="fullText"
-                    style={{
-                      maxWidth: isDesktopOrLaptop ? '800px' : '400px',
-                      margin: '0 auto',
-                      fontSize: '23px'
-                    }}
-                  >
-                    {fullText}
-                  </p>
-                )}
+            <div
+              className="fullText"
+              style={{
+                maxWidth: isDesktopOrLaptop ? '900px' : '90%',
+                margin: '40px auto',
+                fontSize: isDesktopOrLaptop ? '21px' : '18px',
+                lineHeight: '1.6',
+                textAlign: 'left',
+                padding: '0 20px',
+                whiteSpace: 'pre-wrap' // Important for dynamic text layout
+              }}
+            >
+              {fullText}
+            </div>
           </div>
         </div>
       </div>
