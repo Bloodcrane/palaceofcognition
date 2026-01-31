@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { databases, storage } from '../appwrite';
 import { Query, ID } from 'appwrite';
 import './UserPage.css';
@@ -55,8 +56,32 @@ const UserPage = ({ user }) => {
           ]
         );
 
-        const mappedVotes = votesResponse.documents.map(vote => {
-          const article = articles.find(a => a.id.toString() === vote.post_id);
+        // Fetch details for each voted article
+        const mappedVotes = await Promise.all(votesResponse.documents.map(async (vote) => {
+          // 1. Try finding in local JSON
+          let article = articles.find(a => a.id.toString() === vote.post_id);
+
+          if (!article) {
+            // 2. Try fetching from Appwrite articles collection
+            try {
+              const dynamicDoc = await databases.getDocument(
+                VOTES_DATABASE_ID,
+                ARTICLES_COLLECTION_ID,
+                vote.post_id
+              );
+              article = {
+                id: dynamicDoc.$id,
+                title: dynamicDoc.title,
+                description: dynamicDoc.description,
+                imageUrl: dynamicDoc.imageUrl,
+                author: dynamicDoc.author,
+                isDynamic: true
+              };
+            } catch (err) {
+              console.warn(`Could not fetch dynamic article ${vote.post_id}:`, err);
+            }
+          }
+
           if (article) {
             return {
               ...article,
@@ -66,9 +91,9 @@ const UserPage = ({ user }) => {
             };
           }
           return null;
-        }).filter(item => item !== null);
+        }));
 
-        setVotedArticles(mappedVotes);
+        setVotedArticles(mappedVotes.filter(item => item !== null));
       } catch (voteError) {
         console.error("Error fetching user votes:", voteError);
       }
@@ -371,13 +396,17 @@ const UserPage = ({ user }) => {
                       key={article.voteId}
                       className="vote-card"
                     >
-                      <div className="vote-card-image" style={{ backgroundImage: `url(${article.imageUrl})` }}>
-                        <div className="vote-badge" style={{ backgroundColor: article.voteType === 1 ? '#5b744d' : '#3d2929' }}>
-                          {article.voteType === 1 ? '💚 მოწონებული' : '💔 დაწუნებული'}
+                      <Link to={`/article/${article.id}`} className="vote-card-link">
+                        <div className="vote-card-image" style={{ backgroundImage: `url(${article.imageUrl})` }}>
+                          <div className="vote-badge" style={{ backgroundColor: article.voteType === 1 ? '#5b744d' : '#3d2929' }}>
+                            {article.voteType === 1 ? '💚 მოწონებული' : '💔 დაწუნებული'}
+                          </div>
                         </div>
-                      </div>
-                      <div className="vote-card-content">
-                        <h4>{article.title}</h4>
+                        <div className="vote-card-content">
+                          <h4>{article.title}</h4>
+                        </div>
+                      </Link>
+                      <div className="vote-card-actions">
                         <button onClick={() => handleRemoveVote(article.voteId)} className="remove-vote-btn">
                           ისტორიიდან წაშლა
                         </button>

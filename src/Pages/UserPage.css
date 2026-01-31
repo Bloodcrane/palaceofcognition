@@ -252,11 +252,22 @@
     transform: translateY(-5px);
 }
 
+.vote-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
 .vote-card-image {
     height: 160px;
     background-size: cover;
     background-position: center;
     position: relative;
+    transition: transform 0.3s ease;
+}
+
+.vote-card-link:hover .vote-card-image {
+    transform: scale(1.02);
 }
 
 .vote-badge {
@@ -276,12 +287,16 @@
 }
 
 .vote-card-content h4 {
-    margin: 0 0 10px 0;
+    margin: 0;
     font-size: 1.1rem;
     color: #eee;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.vote-card-actions {
+    padding: 10px 15px 15px 15px;
 }
 
 .remove-vote-btn {
