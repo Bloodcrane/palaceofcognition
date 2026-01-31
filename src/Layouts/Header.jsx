@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { React, useState } from "react";
 import { useMediaQuery } from 'react-responsive';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const HeaderLayout = () => {
     const location = useLocation();
@@ -20,18 +20,29 @@ const HeaderLayout = () => {
         setShowMobileNav(!showMobileNav);
     };
 
-    const navItemVariants = {
-        hidden: { opacity: 0, y: -20 },
-        visible: (i) => ({
+    const containerVariants = {
+        hidden: { opacity: 0, y: -50 },
+        visible: {
             opacity: 1,
             y: 0,
             transition: {
-                delay: i * 0.1,
                 duration: 0.5,
+                staggerChildren: 0.1,
+                delayChildren: 0.2
+            }
+        }
+    };
+
+    const navItemVariants = {
+        hidden: { opacity: 0, y: -20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
                 type: "spring",
                 stiffness: 100
             }
-        })
+        }
     };
 
     const MotionLink = motion(Link);
@@ -42,16 +53,36 @@ const HeaderLayout = () => {
             {isDesktopOrLaptop && (
                 <motion.header
                     className='layoutDiv'
-                    initial={{ opacity: 0, y: -50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
                 >
                     <h2>Palace Of Cognition</h2>
-                    {!isHome && <MotionLink custom={0} variants={navItemVariants} initial="hidden" animate="visible" onClick={handlePageChange} className="layoutButton" to={'/'} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>მთავარი</MotionLink>}
-                    <MotionLink custom={1} variants={navItemVariants} initial="hidden" animate="visible" onClick={handlePageChange} className="layoutButton" to={'/books'} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>წიგნები</MotionLink>
-                    <MotionLink custom={2} variants={navItemVariants} initial="hidden" animate="visible" onClick={handlePageChange} className="layoutButton" to={'/movies'} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>ფილმები</MotionLink>
-                    <MotionLink custom={3} variants={navItemVariants} initial="hidden" animate="visible" onClick={handlePageChange} className="layoutButton" to={'/articles'} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>რეცენზიები</MotionLink>
-                    <MotionLink custom={4} variants={navItemVariants} initial="hidden" animate="visible" onClick={handlePageChange} style={{ borderColor: '#598eff', color: '#598eff' }} className="layoutButton" to={'/signup'} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>ანგარიში</MotionLink>
+                    <div className="headerButtons">
+                        <AnimatePresence mode="popLayout">
+                            {!isHome && (
+                                <MotionLink
+                                    layout
+                                    key="home-link"
+                                    variants={navItemVariants}
+                                    initial="hidden"
+                                    animate="visible"
+                                    exit={{ opacity: 0, scale: 0.8 }}
+                                    onClick={handlePageChange}
+                                    className="layoutButton"
+                                    to={'/'}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                >
+                                    მთავარი
+                                </MotionLink>
+                            )}
+                        </AnimatePresence>
+                        <MotionLink variants={navItemVariants} onClick={handlePageChange} className="layoutButton" to={'/books'} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>წიგნები</MotionLink>
+                        <MotionLink variants={navItemVariants} onClick={handlePageChange} className="layoutButton" to={'/movies'} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>ფილმები</MotionLink>
+                        <MotionLink variants={navItemVariants} onClick={handlePageChange} className="layoutButton" to={'/articles'} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>რეცენზიები</MotionLink>
+                        <MotionLink variants={navItemVariants} onClick={handlePageChange} style={{ borderColor: '#598eff', color: '#598eff' }} className="layoutButton" to={'/signup'} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>ანგარიში</MotionLink>
+                    </div>
                 </motion.header>
             )}
 
@@ -61,7 +92,9 @@ const HeaderLayout = () => {
                     <button className="mobileShowButton" onClick={toggleMobileNav}>მენიუ</button>
                     <div className={showMobileNav ? 'mobile-nav show' : 'mobile-nav'}>
                         <button className="mobileShowButton" onClick={toggleMobileNav}>მენიუ</button>
-                        {!isHome && <MotionLink onClick={handlePageChange} className="layoutButton-mobile" to={'/'} whileTap={{ scale: 0.95 }}>მთავარი</MotionLink>}
+                        <AnimatePresence>
+                            {!isHome && <MotionLink layout onClick={handlePageChange} className="layoutButton-mobile" to={'/'} whileTap={{ scale: 0.95 }}>მთავარი</MotionLink>}
+                        </AnimatePresence>
                         <MotionLink onClick={handlePageChange} className="layoutButton-mobile" to={'/books'} whileTap={{ scale: 0.95 }}>წიგნები</MotionLink>
                         <MotionLink onClick={handlePageChange} className="layoutButton-mobile" to={'/movies'} whileTap={{ scale: 0.95 }}>ფილმები</MotionLink>
                         <MotionLink onClick={handlePageChange} className="layoutButton-mobile" to={'/articles'} whileTap={{ scale: 0.95 }}>რეცენზიები</MotionLink>

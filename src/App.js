@@ -36,7 +36,7 @@ const AnimatedRoutes = () => {
   }, []);
 
   return (
-    <>
+    <div className="content-container">
       <HeaderLayout />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
@@ -51,7 +51,7 @@ const AnimatedRoutes = () => {
           <Route path="/article/:title" element={<PageTransition><SingleArticlePage /></PageTransition>} />
         </Routes>
       </AnimatePresence>
-    </>
+    </div>
   );
 };
 

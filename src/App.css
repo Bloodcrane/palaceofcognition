@@ -1,4 +1,4 @@
-@font-face{
+@font-face {
   font-family: mainFont;
   src: url(Fonts/bpg_glaho.ttf);
 }
@@ -35,7 +35,9 @@ body {
   -o-transition: all 0.3s;
 }
 
-
+.content-container {
+  padding-top: 120px;
+}
 
 .article-container {
   flex-direction: column;
@@ -51,13 +53,13 @@ body {
   -ms-transition: all 0.3s;
   -o-transition: all 0.3s;
 }
- 
+
 .fullText {
   margin-left: 95px;
   margin-right: 95px;
   color: #c5b9af;
-  text-align:justify;
-  word-break:keep-all;
+  text-align: justify;
+  word-break: keep-all;
 }
 
 
@@ -135,7 +137,7 @@ body {
   -o-border-radius: 15px;
 }
 
-.loadingTxt{
+.loadingTxt {
   text-align: center;
   align-self: center;
   justify-self: center;
@@ -248,7 +250,7 @@ body {
   left: 0;
   transition: all 0.3s;
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
   flex-wrap: wrap;
   justify-content: flex-start;
   text-align: center;
@@ -277,7 +279,8 @@ body {
   text-shadow: 0px 2px 5px black;
 }
 
-.layoutButton, .shareButton {
+.layoutButton,
+.shareButton {
   padding: 10px 20px;
   margin-top: 5px;
   margin-right: 10px;
@@ -290,31 +293,33 @@ body {
   background-image: url('./Images/Style/noise-dark.png'), linear-gradient(to top, #3b3430, #5e534c);
   border: 2px solid;
   border-color: #4d463e;
-  border-radius: 5px; 
+  border-radius: 5px;
   transition: background-color 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s, color 0.3s, background-image 0.3s;
 }
 
 
-.layoutButton:hover, .shareButton:hover {
-  border-color: #7a7167; 
+.layoutButton:hover,
+.shareButton:hover {
+  border-color: #7a7167;
   box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.658);
   background-image: url('./Images/Style/noise-light.png'), linear-gradient(to bottom, #6e645d, #695a50);
 }
 
-.layoutButton:active, .shareButton:active {
+.layoutButton:active,
+.shareButton:active {
   background-image: url('./Images/Style/noise-light.png'), linear-gradient(to bottom, #7c736c, #695a50);
-  transform: translateY(2px); 
+  transform: translateY(2px);
   color: #ffffffa6;
   box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
 }
 
-.btnMargin{
-  display:grid;
-  justify-content:space-evenly;
+.btnMargin {
+  display: grid;
+  justify-content: space-evenly;
 }
 
 
-.webComponent-button{
+.webComponent-button {
   transform: translateY(15px);
   padding: 10px 23px;
   font-size: 16px;
@@ -333,8 +338,8 @@ body {
 }
 
 .webComponent-button:hover {
-  background-color: #424242; 
-  border-color: #929292; 
+  background-color: #424242;
+  border-color: #929292;
   box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.658);
   background-image: url('./Images/Style/noise-light.png');
 }
