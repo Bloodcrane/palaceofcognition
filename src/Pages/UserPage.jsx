@@ -11,7 +11,6 @@ const VOTES_COLLECTION_ID = 'user_votes';
 const UserPage = () => {
   const [user, setUser] = useState(null);
   const [votedArticles, setVotedArticles] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,10 +46,8 @@ const UserPage = () => {
         setVotedArticles(mappedArticles);
       } catch (error) {
         console.error("Error fetching data:", error);
-        // Handle not logged in or other errors
-        if (!user) window.location.href = '/login';
-      } finally {
-        setIsLoading(false);
+        // Redirect if fetching user fails
+        window.location.href = '/login';
       }
     };
 
