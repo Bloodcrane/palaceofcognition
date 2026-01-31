@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { account, databases } from '../appwrite';
@@ -74,7 +74,9 @@ const ArticleList = () => {
 
   const totalPages = Math.ceil(allArticles.length / articlesPerPage);
   const startIndex = (currentPage - 1) * articlesPerPage;
-  const currentArticles = allArticles.slice(startIndex, startIndex + articlesPerPage);
+  const currentArticles = useMemo(() => {
+    return allArticles.slice(startIndex, startIndex + articlesPerPage);
+  }, [allArticles, startIndex]);
 
   const handlePageChange = () => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -118,7 +120,7 @@ const ArticleList = () => {
     };
 
     fetchVotes();
-  }, [currentArticles.map(a => a.id).join(',')]); // Stable dependency
+  }, [currentArticles]);
 
   const handleVote = async (articleId, type) => {
     if (!user) {

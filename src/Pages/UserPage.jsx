@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { account, databases, storage } from '../appwrite';
+import { databases, storage } from '../appwrite';
 import { Query, ID } from 'appwrite';
 import './UserPage.css';
 import articles from '../Articles.json';
