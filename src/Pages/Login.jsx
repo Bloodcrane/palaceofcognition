@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import supabase from '../supabase';
+import { account } from '../appwrite';
 import './LogInUp.css';
 import HeaderLayout from '../Layouts/Header';
 
@@ -12,9 +12,13 @@ const Login = () => {
 
   useEffect(() => {
     const checkUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        navigate('/user'); // Redirect to user page if already logged in
+      try {
+        const user = await account.get();
+        if (user) {
+          navigate('/user');
+        }
+      } catch (error) {
+        // Not logged in
       }
     };
     checkUser();
@@ -27,22 +31,18 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
-      setError(error.message);
-    } else {
+    try {
+      await account.createEmailPasswordSession(email, password);
       navigate('/');
+    } catch (error) {
+      setError(error.message);
     }
   };
 
   return (
     <div>
-      <HeaderLayout/>
-        <div className='loginPage'>
+      <HeaderLayout />
+      <div className='loginPage'>
         <h2>გთხოვთ, შეიყვანეთ თქვენი ანგარიში.</h2>
         {error && <div style={{ color: 'red' }}>{error}</div>}
         <form onSubmit={handleLogin}>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import supabase from '../supabase';
+import { account } from '../appwrite';
 import './UserPage.css';
 import HeaderLayout from '../Layouts/Header';
 
@@ -8,11 +8,12 @@ const UserPage = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        setUser(user);
-      } else {
-        // Redirect to login if no user is found
+      try {
+        const user = await account.get();
+        if (user) {
+          setUser(user);
+        }
+      } catch (error) {
         window.location.href = '/login';
       }
     };
@@ -21,19 +22,19 @@ const UserPage = () => {
 
   return (
     <div>
-        <HeaderLayout/>
-        <div className="userPage">
+      <HeaderLayout />
+      <div className="userPage">
         {user ? (
-            <div className="profileContainer">
+          <div className="profileContainer">
             <div className="profileIcon">
             </div>
             <h2>{user.email}</h2>
             <p>თქვენი პროფილის გვერდი</p>
-            </div>
+          </div>
         ) : (
-            <p>იტვირთება...</p>
+          <p>იტვირთება...</p>
         )}
-        </div>
+      </div>
     </div>
   );
 };

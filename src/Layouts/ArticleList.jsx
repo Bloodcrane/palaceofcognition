@@ -1,11 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import supabase from '../supabase';
+import { account, databases } from '../appwrite';
+import { ID, Query } from 'appwrite';
 import { v5 as uuidv5 } from 'uuid';
 import articles from '../Articles.json';
 
 const colors = ['#6b7a6f', '#775a5a', '#634875', '#647d94'];
 const articlesPerPage = 3;
+
+// Placeholder Database ID - Replace with actual ID from Appwrite Console
+const VOTES_DATABASE_ID = '697e6e0200022dd882b7';
+const VOTES_COLLECTION_ID = 'user_votes';
+const ARTICLE_NAMESPACE = '6ba7b810-9dad-11d1-80b4-00c04fd430c8';
 
 function isValidUUID(str) {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(str);
@@ -18,8 +24,6 @@ function getColorIndex(str) {
   }
   return hash % colors.length;
 }
-
-const ARTICLE_NAMESPACE = '6ba7b810-9dad-11d1-80b4-00c04fd430c8';
 
 const ArticleList = () => {
   const location = useLocation();
@@ -41,89 +45,138 @@ const ArticleList = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
+      try {
+        const user = await account.get();
         setUser(user);
+      } catch (error) {
+        // Not logged in
       }
     };
     fetchUser();
   }, []);
 
-useEffect(() => {
-  const fetchVotes = async () => {
-    const articleUUIDs = currentArticles.map((article) =>
-      isValidUUID(article.id) ? article.id : uuidv5(article.id.toString(), ARTICLE_NAMESPACE)
-    );
+  // Fetch votes for current articles
+  useEffect(() => {
+    const fetchVotes = async () => {
+      if (currentArticles.length === 0) return;
 
-    const { data, error } = await supabase
-      .from('likes')
-      .select('article_id, likes, dislikes')
-      .in('article_id', articleUUIDs);
+      const likesMap = {};
+      const dislikesMap = {};
 
-    if (error) {
-      console.error('Error fetching votes:', error.message);
+      try {
+        // We need to fetch votes for EACH article. 
+        // Ideally, we'd use a single query with OR logic, but for simplicity/limitations, we'll iterate.
+        // Optimally: databases.listDocuments(DB, COL, [Query.equal('post_id', [id1, id2...])]) if supported or multiple requests.
+
+        const promises = currentArticles.map(async (article) => {
+          const articleUUID = isValidUUID(article.id) ? article.id : uuidv5(article.id.toString(), ARTICLE_NAMESPACE);
+
+          // Get all votes for this article
+          // Note: This matches the user's logic request to "count documents"
+          // For a production app with many votes, aggregation is better, but this follows the instruction:
+          // "Total Likes: Count documents where post_id == 'XYZ' and vote_type == 1"
+
+          // Fetching all votes might be heavy. We will limit. 
+          // BUT: Appwrite listDocuments returns 'total'. We can filter by post_id and vote_type.
+
+          const [likesData, dislikesData] = await Promise.all([
+            databases.listDocuments(VOTES_DATABASE_ID, VOTES_COLLECTION_ID, [
+              Query.equal('post_id', articleUUID),
+              Query.equal('vote_type', 1),
+              Query.limit(1) // We only need the 'total' count
+            ]),
+            databases.listDocuments(VOTES_DATABASE_ID, VOTES_COLLECTION_ID, [
+              Query.equal('post_id', articleUUID),
+              Query.equal('vote_type', -1),
+              Query.limit(1)
+            ])
+          ]);
+
+          likesMap[articleUUID] = likesData.total;
+          dislikesMap[articleUUID] = dislikesData.total;
+        });
+
+        await Promise.all(promises);
+
+        setLikes(likesMap);
+        setDislikes(dislikesMap);
+
+      } catch (error) {
+        // Fail silently or log if needed, as placeholder ID will cause errors initially
+        console.error("Error fetching votes:", error);
+      }
+    };
+
+    fetchVotes();
+  }, [currentArticles]);
+
+
+  const handleVote = async (articleUUID, type) => {
+    if (!user) {
+      alert('გთხოვთ შეიყვანეთ ან შექმენით ანგარიში ხმის მისაცემად!');
       return;
     }
 
-    const likesMap = {};
-    const dislikesMap = {};
+    // Optimistic UI Update (Optional, simpler to wait for refresh or just increment local state temporarily)
+    // For now, let's implement the logic and refetch or manually adjust state.
 
-    data.forEach(({ article_id, likes, dislikes }) => {
-      likesMap[article_id] = (likesMap[article_id] || 0) + likes;
-      dislikesMap[article_id] = (dislikesMap[article_id] || 0) + dislikes;
-    });
+    const voteValue = type === 'like' ? 1 : -1;
 
-    setLikes(likesMap);
-    setDislikes(dislikesMap);
+    try {
+      // 1. Check if user already voted
+      const existing = await databases.listDocuments(VOTES_DATABASE_ID, VOTES_COLLECTION_ID, [
+        Query.equal('post_id', articleUUID),
+        Query.equal('user_id', user.$id)
+      ]);
+
+      if (existing.total > 0) {
+        const docId = existing.documents[0].$id;
+        const currentVoteType = existing.documents[0].vote_type;
+
+        if (currentVoteType === voteValue) {
+          // Remove vote if clicking the same button again
+          await databases.deleteDocument(VOTES_DATABASE_ID, VOTES_COLLECTION_ID, docId);
+
+          // Update State Locally
+          if (voteValue === 1) {
+            setLikes(prev => ({ ...prev, [articleUUID]: Math.max(0, (prev[articleUUID] || 0) - 1) }));
+          } else {
+            setDislikes(prev => ({ ...prev, [articleUUID]: Math.max(0, (prev[articleUUID] || 0) - 1) }));
+          }
+
+        } else {
+          // Update vote if switching from like to dislike or vice versa
+          await databases.updateDocument(VOTES_DATABASE_ID, VOTES_COLLECTION_ID, docId, { vote_type: voteValue });
+
+          // Update State Locally
+          if (voteValue === 1) {
+            setLikes(prev => ({ ...prev, [articleUUID]: (prev[articleUUID] || 0) + 1 }));
+            setDislikes(prev => ({ ...prev, [articleUUID]: Math.max(0, (prev[articleUUID] || 0) - 1) }));
+          } else {
+            setLikes(prev => ({ ...prev, [articleUUID]: Math.max(0, (prev[articleUUID] || 0) - 1) }));
+            setDislikes(prev => ({ ...prev, [articleUUID]: (prev[articleUUID] || 0) + 1 }));
+          }
+        }
+      } else {
+        // 2. Create new vote
+        await databases.createDocument(VOTES_DATABASE_ID, VOTES_COLLECTION_ID, ID.unique(), {
+          post_id: articleUUID,
+          user_id: user.$id,
+          vote_type: voteValue
+        });
+
+        // Update State Locally
+        if (voteValue === 1) {
+          setLikes(prev => ({ ...prev, [articleUUID]: (prev[articleUUID] || 0) + 1 }));
+        } else {
+          setDislikes(prev => ({ ...prev, [articleUUID]: (prev[articleUUID] || 0) + 1 }));
+        }
+      }
+    } catch (error) {
+      console.error("Voting failed", error);
+      alert("Vote failed. Please check console (Database ID might be missing).");
+    }
   };
-
-  fetchVotes();
-}, [currentArticles]);
-
-
-const handleVote = async (articleUUID, type) => {
-  if (!user) {
-    alert('გთხოვთ შეიყვანეთ ან შექმენით ანგარიში ხმის მისაცემად!');
-    return;
-  }
-
-  const { data: existingVote, error: selectError } = await supabase
-    .from('likes')
-    .select('*')
-    .eq('article_id', articleUUID)
-    .eq('user_id', user.id)
-    .maybeSingle();
-
-  if (selectError) {
-    console.error('Error checking for existing vote:', selectError.message);
-    return;
-  }
-
-  if (existingVote) {
-    console.log('User has already voted on this article.');
-    return;
-  }
-
-  const newLikeCount = type === 'like' ? 1 : 0;
-  const newDislikeCount = type === 'dislike' ? 1 : 0;
-
-  const { error } = await supabase
-    .from('likes')
-    .insert({
-      article_id: articleUUID,
-      user_id: user.id,
-      likes: newLikeCount,
-      dislikes: newDislikeCount,
-    });
-
-  if (error) {
-    console.error('Error while inserting vote:', error.message);
-  } else {
-    setLikes((prev) => ({ ...prev, [articleUUID]: (prev[articleUUID] || 0) + newLikeCount }));
-    setDislikes((prev) => ({ ...prev, [articleUUID]: (prev[articleUUID] || 0) + newDislikeCount }));
-    console.log('Vote recorded.');
-  }
-};
 
 
   return (

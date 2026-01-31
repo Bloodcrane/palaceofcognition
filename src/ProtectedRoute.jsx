@@ -1,7 +1,7 @@
 // ProtectedRoute.jsx
 import { Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import supabase from './supabase';
+import { account } from './appwrite';
 
 const ProtectedRoute = ({ element }) => {
   const [loading, setLoading] = useState(true);
@@ -9,8 +9,12 @@ const ProtectedRoute = ({ element }) => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
+      try {
+        const user = await account.get();
+        setUser(user);
+      } catch (error) {
+        // Not logged in
+      }
       setLoading(false);
     };
     fetchUser();

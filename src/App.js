@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import supabase from './supabase';
+import { client, account } from './appwrite';
 import LoaderLayout from './Layouts/Loader';
 import './App.css';
 
@@ -19,9 +19,14 @@ const App = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    client.ping();
     const fetchUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
+      try {
+        const user = await account.get();
+        setUser(user);
+      } catch (error) {
+        setUser(null);
+      }
     };
     fetchUser();
   }, []);
