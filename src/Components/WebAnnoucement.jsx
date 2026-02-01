@@ -1,7 +1,7 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-const WebAnnoucement = ({ imageUrl, title, description }) => {
+const WebAnnoucement = ({ imageUrl, title, description, author }) => {
   const navigate = useNavigate();
 
   const handleSignInRedirect = () => {
@@ -13,6 +13,9 @@ const WebAnnoucement = ({ imageUrl, title, description }) => {
       {imageUrl && <img src={imageUrl} className="webComponent-bg-img" alt="" />}
       <div className="webComponent-overlay">
         <h1 className="webComponent-title">{title}</h1>
+        <Link to={`/profile/697e9164002cfe5d9083`} className="webComponent-author" style={{ textDecoration: 'none', color: '#598eff' }}>
+          {author}
+        </Link>
         <label className="webComponent-description">{description}</label>
       </div>
       {imageUrl && <img src={imageUrl} className="webComponent-img" alt="" />}
