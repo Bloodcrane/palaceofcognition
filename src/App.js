@@ -18,6 +18,7 @@ const BookPage = lazy(() => import('./Pages/BookPage'));
 const SingleArticlePage = lazy(() => import('./Pages/SingleArticlePage'));
 const UserPage = lazy(() => import('./Pages/UserPage'));
 const AdminPage = lazy(() => import('./Pages/AdminPage'));
+const ProfilePage = lazy(() => import('./Pages/ProfilePage'));
 
 const AnimatedRoutes = ({ user, setUser }) => {
   const location = useLocation();
@@ -30,6 +31,7 @@ const AnimatedRoutes = ({ user, setUser }) => {
         <Route path="/signup" element={<PageTransition>{user ? <Navigate to="/user" /> : <SignUp onLogin={setUser} />}</PageTransition>} />
         <Route path="/user" element={<PageTransition>{user ? <UserPage user={user} /> : <Navigate to="/login" />}</PageTransition>} />
         <Route path="/admin" element={<PageTransition><AdminPage user={user} /></PageTransition>} />
+        <Route path="/profile/:id" element={<PageTransition><ProfilePage /></PageTransition>} />
         <Route path="/about" element={<PageTransition><AboutPage /></PageTransition>} />
         <Route path="/articles" element={<PageTransition><ArticlePage /></PageTransition>} />
         <Route path="/books" element={<PageTransition><BookPage /></PageTransition>} />

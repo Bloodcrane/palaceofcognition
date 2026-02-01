@@ -259,7 +259,7 @@ const UserPage = ({ user }) => {
             <h2>{user.name || 'Anonymous'}</h2>
             <p style={{ color: '#888', fontSize: '0.9rem', marginBottom: '10px', marginTop: '5px' }}>{user.email}</p>
             <p>თქვენი პროფილის გვერდი</p>
-            <div className="profile-actions">
+            <div className="profile-actions-vertical">
               <button
                 className="post-toggle-btn"
                 onClick={() => {
@@ -269,6 +269,9 @@ const UserPage = ({ user }) => {
               >
                 {showUpload || editingArticle ? 'გაუქმება' : 'სტატიის დამატება +'}
               </button>
+              <Link to={`/profile/${user.$id}`} className="post-toggle-btn" style={{ textDecoration: 'none', background: '#333' }}>
+                საჯარო პროფილი
+              </Link>
             </div>
           </div>
 

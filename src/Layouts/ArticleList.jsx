@@ -59,6 +59,7 @@ const ArticleList = () => {
           description: doc.description,
           imageUrl: doc.imageUrl,
           author: doc.author,
+          user_id: doc.user_id,
           isDynamic: true
         }));
 
@@ -217,7 +218,13 @@ const ArticleList = () => {
                     <div className="webComponent-overlay">
                       <h2 className="webComponent-title">{article.title}</h2>
                       <div className="webComponent-meta">
-                        <span className="webComponent-author">{article.author}</span>
+                        {article.isDynamic && article.user_id ? (
+                          <Link to={`/profile/${article.user_id}`} className="webComponent-author" style={{ textDecoration: 'none', color: '#598eff' }}>
+                            {article.author}
+                          </Link>
+                        ) : (
+                          <span className="webComponent-author">{article.author}</span>
+                        )}
                       </div>
                       <p className="webComponent-description">{article.description}</p>
                     </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import articles from '../Articles.json';
 import { useMediaQuery } from 'react-responsive';
 import { Helmet } from 'react-helmet';
@@ -48,7 +48,9 @@ const SingleArticlePage = () => {
               title: dynamicArticle.title,
               author: dynamicArticle.author,
               imageUrl: dynamicArticle.imageUrl,
-              description: dynamicArticle.description
+              description: dynamicArticle.description,
+              user_id: dynamicArticle.user_id,
+              isDynamic: true
             });
             // For dynamic articles, fullText is stored directly in the DB
             setFullText(dynamicArticle.fullText);
@@ -113,7 +115,15 @@ const SingleArticlePage = () => {
             }}
           >
             <h1>{article.title}</h1>
-            <p>ავტორი: {article.author}</p>
+            <p>
+              ავტორი: {article.isDynamic && article.user_id ? (
+                <Link to={`/profile/${article.user_id}`} style={{ color: '#598eff', textDecoration: 'none' }}>
+                  {article.author}
+                </Link>
+              ) : (
+                article.author
+              )}
+            </p>
             <img
               src={article.imageUrl}
               alt=""
