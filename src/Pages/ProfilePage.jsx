@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { databases } from '../appwrite';
-import { Query } from 'appwrite';
+import { Query, ID } from 'appwrite';
 import { motion, AnimatePresence } from 'framer-motion';
 import './UserPage.css'; // Reuse UserPage styles
 
 const VOTES_DATABASE_ID = '697e6e0200022dd882b7';
 const ARTICLES_COLLECTION_ID = 'articles';
 const PROFILES_COLLECTION_ID = 'user_profiles';
+const FOLLOWS_COLLECTION_ID = 'user_follows';
 
 const container = {
     hidden: { opacity: 0 },
@@ -22,12 +23,17 @@ const item = {
     show: { opacity: 1, y: 0 }
 };
 
-const ProfilePage = () => {
+const ProfilePage = ({ user }) => {
     const { id: userId } = useParams();
+    const navigate = useNavigate();
     const [userArticles, setUserArticles] = useState([]);
     const [authorName, setAuthorName] = useState('');
     const [profileImgUrl, setProfileImgUrl] = useState('');
     const [profileDescription, setProfileDescription] = useState('');
+    const [followerCount, setFollowerCount] = useState(0);
+    const [isFollowing, setIsFollowing] = useState(false);
+    const [followDocId, setFollowDocId] = useState(null);
+    const [isLoadingFollow, setIsLoadingFollow] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -78,8 +84,80 @@ const ProfilePage = () => {
             }
         };
 
+        const fetchFollowData = async () => {
+            try {
+                // 1. Count followers
+                const followersRes = await databases.listDocuments(
+                    VOTES_DATABASE_ID,
+                    FOLLOWS_COLLECTION_ID,
+                    [Query.equal('following_id', userId)]
+                );
+                setFollowerCount(followersRes.total);
+
+                // 2. Check if current user is following (only if logged in)
+                if (user) {
+                    const myFollowRes = await databases.listDocuments(
+                        VOTES_DATABASE_ID,
+                        FOLLOWS_COLLECTION_ID,
+                        [
+                            Query.equal('follower_id', user.$id),
+                            Query.equal('following_id', userId)
+                        ]
+                    );
+                    if (myFollowRes.documents.length > 0) {
+                        setIsFollowing(true);
+                        setFollowDocId(myFollowRes.documents[0].$id);
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching follow data:", error);
+            }
+        };
+
         fetchUserProfile();
-    }, [userId]);
+        fetchFollowData();
+    }, [userId, user]);
+
+    const handleFollowToggle = async () => {
+        if (!user) {
+            navigate('/login');
+            return;
+        }
+
+        setIsLoadingFollow(true);
+        try {
+            if (isFollowing) {
+                // Unfollow
+                await databases.deleteDocument(
+                    VOTES_DATABASE_ID,
+                    FOLLOWS_COLLECTION_ID,
+                    followDocId
+                );
+                setIsFollowing(false);
+                setFollowDocId(null);
+                setFollowerCount(prev => prev - 1);
+            } else {
+                // Follow
+                const newFollow = await databases.createDocument(
+                    VOTES_DATABASE_ID,
+                    FOLLOWS_COLLECTION_ID,
+                    ID.unique(),
+                    {
+                        follower_id: user.$id,
+                        following_id: userId
+                    }
+                );
+                setIsFollowing(true);
+                setFollowDocId(newFollow.$id);
+                setFollowerCount(prev => prev + 1);
+            }
+        } catch (error) {
+            console.error("Follow toggle error:", error);
+            alert("მოქმედება ვერ შესრულდა.");
+        } finally {
+            setIsLoadingFollow(false);
+        }
+    };
 
     return (
         <div className="userPage profilePage">
@@ -100,6 +178,38 @@ const ProfilePage = () => {
                         </p>
                     )}
                     <p style={{ marginTop: profileDescription ? '5px' : '0' }}>ავტორის პროფილი</p>
+
+                    {/* Follower Count */}
+                    <p style={{ fontSize: '0.95rem', color: '#888', marginTop: '8px' }}>
+                        👥 {followerCount} ფოლოვერი
+                    </p>
+
+                    {/* Follow Button - only show if not viewing own profile */}
+                    {user && user.$id !== userId && (
+                        <button
+                            onClick={handleFollowToggle}
+                            disabled={isLoadingFollow}
+                            className="post-toggle-btn"
+                            style={{
+                                marginTop: '15px',
+                                background: isFollowing ? '#3d2929' : '#598eff',
+                                cursor: isLoadingFollow ? 'not-allowed' : 'pointer',
+                                opacity: isLoadingFollow ? 0.6 : 1
+                            }}
+                        >
+                            {isLoadingFollow ? '...' : (isFollowing ? '✓ აფოლოვებ' : '+ დააფოლოვე')}
+                        </button>
+                    )}
+
+                    {!user && (
+                        <button
+                            onClick={() => navigate('/login')}
+                            className="post-toggle-btn"
+                            style={{ marginTop: '15px', background: '#598eff' }}
+                        >
+                            + დააფოლოვე
+                        </button>
+                    )}
                 </motion.div>
 
                 <div className="management-section" style={{ marginTop: '50px' }}>
