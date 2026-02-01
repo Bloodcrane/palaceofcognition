@@ -44,7 +44,7 @@ const HomePage = () => {
                     title="საიტის განახლება 3.0"
                     description="1. ანგარიშის შექმნა 2. პროფილის გვერდები 3. მოწონების ფუნქციონალი 4. სტატიების გამოქვეყნება და რედაქტირება 5. მოწონების ისტორია 6. ადმინის გვერდი 7. ფოლოვერების სისტემა"
                     author="ლუკა ბიკაშვილი"
-                    imageUrl="https://i.pinimg.com/564x/69/ca/df/69cadf4d87dcfda36966160f7e92ff8d.jpg"
+                    imageUrl="https://i.pinimg.com/736x/97/26/fc/9726fc4f13f432e61ec1f552f21b9d6f.jpg"
                 />
 
                 {!isLoading && latestArticle ? (
