@@ -15,7 +15,7 @@ const ArticlePage = () => {
                 <meta property="og:title" content={"Articles"} />
                 <meta property="og:description" content={"View more articles"} />
             </Helmet>
-            <h1 style={Style}>რეცენზიები</h1>
+            <h1 style={Style}>სტატიები</h1>
             <ArticleList />
         </div>
     );

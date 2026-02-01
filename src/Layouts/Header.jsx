@@ -44,7 +44,7 @@ const HeaderLayout = () => {
                         )}
                         <Link onClick={handlePageChange} className="layoutButton" to={'/books'} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>წიგნები</Link>
                         <Link onClick={handlePageChange} className="layoutButton" to={'/movies'} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>ფილმები</Link>
-                        <Link onClick={handlePageChange} className="layoutButton" to={'/articles'} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>რეცენზიები</Link>
+                        <Link onClick={handlePageChange} className="layoutButton" to={'/articles'} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>სტატიები</Link>
                         <Link onClick={handlePageChange} style={{ borderColor: '#598eff', color: '#598eff' }} className="layoutButton" to={'/signup'} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>ანგარიში</Link>
                     </div>
                 </header>
@@ -72,7 +72,7 @@ const HeaderLayout = () => {
                         )}
                         <Link onClick={handlePageChange} className="layoutButton-mobile" to={'/books'} whileTap={{ scale: 0.95 }}>წიგნები</Link>
                         <Link onClick={handlePageChange} className="layoutButton-mobile" to={'/movies'} whileTap={{ scale: 0.95 }}>ფილმები</Link>
-                        <Link onClick={handlePageChange} className="layoutButton-mobile" to={'/articles'} whileTap={{ scale: 0.95 }}>რეცენზიები</Link>
+                        <Link onClick={handlePageChange} className="layoutButton-mobile" to={'/articles'} whileTap={{ scale: 0.95 }}>სტატიები</Link>
                         <Link onClick={handlePageChange} style={{ borderColor: '#598eff', color: '#598eff' }} className="layoutButton-mobile" to={'/signup'} whileTap={{ scale: 0.95 }}>ანგარიში</Link>
                     </div>
                 </header>
