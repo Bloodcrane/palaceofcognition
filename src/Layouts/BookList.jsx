@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { databases } from '../appwrite';
 import { Query } from 'appwrite';
 import books from '../Books.json';
@@ -72,43 +72,56 @@ const BookList = () => {
   };
 
   return (
-    <motion.div
-      variants={container}
-      initial="hidden"
-      animate="show"
-      style={{ width: '100%', minHeight: '500px' }}
-    >
-      <div style={{ marginBottom: '100px' }}>
+    <>
+      <AnimatePresence mode="wait">
         {isLoading ? (
-          <div style={{ textAlign: 'center', marginTop: '100px', fontFamily: 'mainFont' }}>იტვირთება...</div>
+          <motion.div
+            key="loading"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{ textAlign: 'center', marginTop: '100px', fontFamily: 'mainFont', width: '100%', minHeight: '500px' }}
+          >
+            იტვირთება...
+          </motion.div>
         ) : (
-          currentBooks.map((book) => (
-            <motion.div
-              key={book.id}
-              variants={item}
-              className="webComponent"
-              whileHover={{ scale: 1.01, border: `1px solid rgba(255,255,255,0.4)` }}
-            >
-              <img src={book.imageUrl} className="webComponent-bg-img" alt="" />
-              <div className="webComponent-overlay">
-                <h2 className="webComponent-title">{book.title}</h2>
-                <div className="webComponent-meta">
-                  <span className="webComponent-author">{book.author}</span>
-                </div>
-                <p className="webComponent-description">{book.description}</p>
-              </div>
-              <img src={book.imageUrl} className="webComponent-img" alt="" />
-            </motion.div>
-          ))
+          <motion.div
+            key="content"
+            variants={container}
+            initial="hidden"
+            animate="show"
+            style={{ width: '100%', minHeight: '500px' }}
+          >
+            <div style={{ marginBottom: '100px' }}>
+              {currentBooks.map((book) => (
+                <motion.div
+                  key={book.id}
+                  variants={item}
+                  className="webComponent"
+                  whileHover={{ scale: 1.01, border: `1px solid rgba(255,255,255,0.4)` }}
+                >
+                  <img src={book.imageUrl} className="webComponent-bg-img" alt="" />
+                  <div className="webComponent-overlay">
+                    <h2 className="webComponent-title">{book.title}</h2>
+                    <div className="webComponent-meta">
+                      <span className="webComponent-author">{book.author}</span>
+                    </div>
+                    <p className="webComponent-description">{book.description}</p>
+                  </div>
+                  <img src={book.imageUrl} className="webComponent-img" alt="" />
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
         )}
-      </div>
+      </AnimatePresence>
 
       <div className="pagination-container-compact">
         <Link to={`?page=${currentPage > 1 ? currentPage - 1 : 1}`} className="comp-nav-btn" disabled={currentPage === 1} onClick={handlePageChange}>←</Link>
         <span className="page-indicator">{currentPage} / {totalPages}</span>
         <Link to={`?page=${currentPage < totalPages ? currentPage + 1 : totalPages}`} className="comp-nav-btn" disabled={currentPage === totalPages} onClick={handlePageChange}>→</Link>
       </div>
-    </motion.div>
+    </>
   );
 };
 

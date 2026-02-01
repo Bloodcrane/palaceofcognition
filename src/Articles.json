@@ -1,82 +1,74 @@
 [
-    {
-      "id": 1,
-      "title": "ალბერ კამიუს „უცხო“ (1)",
-      "description": "ალბერ კამიუს გასაოცარი ნაწარმოები „უცხო“, რომელიც კამიუმ  1942 წელს დაწერა, ერთი ახალგაზრდა კაცის, მერსოს ცხოვრებას ეხება,  იგი ერთ დღეს იგებს რომ დედამისი თავშესაფარში გარდაიცვალა, მაგრამ მერსო ამის გამო დიდად არ ნაღვლიანდება...",
-      "author": "ამბაკო შარაშენიძე",
-      "imageUrl": "https://i.pinimg.com/564x/7d/c3/91/7dc39197f93320cf683b34dc3d90e91c.jpg",
-      "fullText": "https://res.cloudinary.com/dja1ebgeq/raw/upload/v1715606233/Articles/theoutsider_bq3w3f.txt"
-    },
-    {
-      "id": 2,
-      "title": "ისტორიის ტოლსტოისეული დეკონსტრუქცია რომანის ,,ომი და მშვიდობა” მიხედვით.",
-      "description": "„ომი და მშვიდობა“ განთქმულია იმ უდიდესი სიუჟეტური ლანდშაფტით, რომელსაც ტოლსტოი გვიხატავს. ნაწარმოები სიღრმისეული, დახვეწილი პერსონაჟებით გამოირჩევა, რომლებიც გაცოცხლებულია მათი ურთიერთობებით საზოგადოებასა და ისტორიულ ეპოქასთან...",
-      "author": "ირაკლი ჯაბუა",
-      "imageUrl": "https://i.pinimg.com/564x/48/32/2f/48322fe7a51d386c485046efee117bd2.jpg",
-      "fullText": "https://res.cloudinary.com/dja1ebgeq/raw/upload/v1715606233/Articles/tolstoy_wqeup0.txt"
-    },
-    {
-      "id": 3,
-      "title": "ჰერმან ჰესეს 'ტრამალის მგელი'",
-      "description": "ჰერმან ჰესეს წიგნში ,,ტრამალის მგელი“, ჩვენ, პროტაგონისტ  ჰარი ჰალერს ვეცნობით, რომელიც ორმოცდაათიოდე წლის კაცია. ის თავის თავს ტრამალის მგელს უწოდებს და საკუთარი ცხოვრების მანძილზე, სიმარტოვეში ცდილობს ძალის პოვნას...",
-      "author": "ნიკოლოზ მეტონიძე",
-      "imageUrl": "https://imgs.search.brave.com/Vk-gmw9GWut7FHYk7Zq_c29ppi23UI1rOzyp0bWCkGw/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzL2ZhLzBi/LzJmL2ZhMGIyZmNm/MWY0YmRhMzBiZjNh/NDU5ZWQwZGFkOTc3/LmpwZw",
-      "fullText": "https://res.cloudinary.com/dja1ebgeq/raw/upload/v1715606233/Articles/hesse_nipa9a.txt"
-    },
-    {
-      "id": 4,
-      "title": "სილვია პლათის 'ზარხუფი'",
-      "description": "სილვია პლათის ავტობიოგრაფიული, პირველი და უკანასკნელი რომანის ,,ზარხუფი“, საზოგადოებაში პოპულარობის მოპოვების ძირითადი მიზეზი ფემინიზმის თემაზე ღიად, თამამად საუბარი გახლავთ...",
-      "author": "ანამარი ხაჩატუროვი",
-      "imageUrl": "https://fivebooks.com/images/eMMkTYi9-DXmzsFj/rs:fit:144:0:1/sh:0.5/plain/fb/books/BC_0060837020.jpg",
-      "fullText": "https://res.cloudinary.com/dja1ebgeq/raw/upload/v1715606233/Articles/sylviaplath_tfdqw2.txt"
-    },
-    {
-      "id": 5,
-      "title": "ბენდის ,,Rage Against The Machine“ პოლიტიკა და აქტივიზმი",
-      "description": "როკ ჯგუფი “Rage Against the Machine“, 1991 წელს, ლოს ანჯელესში ჩამოყალიბდა. ის 90-იანი წლების ალტერნატიული როკისა და მეტალის სამყაროში, ერთ-ერთ ყველაზე მნიშვნელოვან და გარდამტეხ ჯგუფად მიიჩნევა",
-      "author": "ირაკლი ჯაბუა",
-      "imageUrl": "https://m.media-amazon.com/images/M/MV5BMTU0NTEwMzEwMV5BMl5BanBnXkFtZTcwNzE2NzAwMQ@@._V1_FMjpg_UX1000_.jpg",
-      "fullText": "https://res.cloudinary.com/dja1ebgeq/raw/upload/v1715606233/Articles/rageagainstthemachine_kyx5li.txt"
-    },
-    {
-      "id": 6,
-      "title": "ალბერ კამიუს „უცხო“ (2)",
-      "description": "რომანში, „უცხო”, ალბერ კამიუ მკითხველს ეგზისტენციალურ საკითხებთან მიმართებით საკუთარ შეხედულებებს უზიარებს. ნაწარმოების მთავარი გმირი, მერსო ალჟირში მცხოვრები ახალგაზრდა ფრანგია...",
-      "author": "მარიამ ბურდული",
-      "imageUrl": "https://i.pinimg.com/564x/97/a5/bd/97a5bd17758406a132940da123b8145c.jpg",
-      "fullText": "https://res.cloudinary.com/dja1ebgeq/raw/upload/v1715606232/Articles/camus_ugben4.txt"
-    },
-    {
-      "id": 7,
-      "title": "პინკ ფლოიდი - ,,The Wall“",
-      "description": "ბრიტანული როკ ჯგუფის, „პინკ ფლოიდის“ ალბომი „კედელი“ (“The Wall”) ყველასათვის ცნობილი უნდა იყოს. იგი, პროგრესული როკის ჟანრში ერთ-ერთ ყველაზე მნიშვნელოვან ნამუშევრად მიიჩნევა...",
-      "author": "ირაკლი ჯაბუა",
-      "imageUrl": "https://i.pinimg.com/564x/61/69/dc/6169dcda57aefb29157d7fee67fdc15b.jpg",
-      "fullText": "https://res.cloudinary.com/dja1ebgeq/raw/upload/v1715606233/Articles/thewallpf_kaxqhj.txt"
-    },
-    {
-      "id": 8,
-      "title": "„12 განრისხებული მამაკაცი“ - განხილვა",
-      "description": "სიდნი ლუმეტის 1957 წლის ამერიკული ფილმი „12 განრისხებული მამაკაცი” გვიამბობს ერთ ბიჭზე, რომელსაც ბრალად მამის მკვლელობა ედება...",
-      "author": "რომანოზ კეკენაძე",
-      "imageUrl": "https://ih1.redbubble.net/image.1856219220.0238/flat,750x,075,f-pad,750x1000,f8f8f8.jpg",
-      "fullText": "https://res.cloudinary.com/dja1ebgeq/raw/upload/v1715606232/Articles/12angrymen_oteuyc.txt"
-    },
-    {
-      "id": 9,
-      "title": "ფრანც კარფკას „გარდასახვა“",
-      "description": "ფრანც კაფკას ნოველას ,,გარდასახვა” დღევანდელ დღეს დიდი ადგილი უკავია მკითხველთა გულებსა და ლიტერატურაში...",
-      "author": "ანამარი ხაჩატუროვი",
-      "imageUrl": "https://i.pinimg.com/564x/2d/0a/c2/2d0ac25561912d411d54e77d9bb61996.jpg",
-      "fullText": "https://res.cloudinary.com/dja1ebgeq/raw/upload/v1715606232/Articles/kafkametamorphosis_jbbigg.txt"
-    },
-    {
-      "id": 10,
-      "title": "„რამდენიმე ინტერვიუ პირად საკითხებზე“ - რეცენზია",
-      "description": "„რამდენიმე ინტერვიუ პირად საკითხებზე“ - რეჟისორ ლანა ღოღობერიძის დრამატული მხატვრული ფილმია...",
-      "author": "მარიამ კუტალაძე",
-      "imageUrl": "https://upload.wikimedia.org/wikipedia/ka/thumb/2/23/%E1%83%A0%E1%83%90%E1%83%9B%E1%83%93%E1%83%94%E1%83%9C%E1%83%98%E1%83%9B%E1%83%94_%E1%83%98%E1%83%9C%E1%83%A2%E1%83%94%E1%83%A0%E1%83%95%E1%83%98%E1%83%A3_%E1%83%9E%E1%83%98%E1%83%A0%E1%83%90%E1%83%93_%E1%83%A1%E1%83%90%E1%83%99%E1%83%98%E1%83%97%E1%83%AE%E1%83%94%E1%83%91%E1%83%96%E1%83%94.jpg/1200px-%E1%83%A0%E1%83%90%E1%83%9B%E1%83%93%E1%83%94%E1%83%9C%E1%83%98%E1%83%9B%E1%83%94_%E1%83%98%E1%83%9C%E1%83%A2%E1%83%94%E1%83%A0%E1%83%95%E1%83%98%E1%83%A3_%E1%83%9E%E1%83%98%E1%83%A0%E1%83%90%E1%83%93_%E1%83%A1%E1%83%90%E1%83%99%E1%83%98%E1%83%97%E1%83%AE%E1%83%94%E1%83%91%E1%83%96%E1%83%94.jpg",
-      "fullText": "https://res.cloudinary.com/dja1ebgeq/raw/upload/v1715606232/Articles/ramdenimeinterviu_u4yipk.txt"
-    }
+  {
+    "id": 1,
+    "title": "ალბერ კამიუს „უცხო“ (1)",
+    "description": "ალბერ კამიუს გასაოცარი ნაწარმოები „უცხო“, რომელიც კამიუმ  1942 წელს დაწერა, ერთი ახალგაზრდა კაცის, მერსოს ცხოვრებას ეხება,  იგი ერთ დღეს იგებს რომ დედამისი თავშესაფარში გარდაიცვალა, მაგრამ მერსო ამის გამო დიდად არ ნაღვლიანდება...",
+    "author": "ამბაკო შარაშენიძე",
+    "imageUrl": "https://i.pinimg.com/564x/7d/c3/91/7dc39197f93320cf683b34dc3d90e91c.jpg",
+    "fullText": "https://res.cloudinary.com/dja1ebgeq/raw/upload/v1715606233/Articles/theoutsider_bq3w3f.txt"
+  },
+  {
+    "id": 2,
+    "title": "ისტორიის ტოლსტოისეული დეკონსტრუქცია რომანის ,,ომი და მშვიდობა” მიხედვით.",
+    "description": "„ომი და მშვიდობა“ განთქმულია იმ უდიდესი სიუჟეტური ლანდშაფტით, რომელსაც ტოლსტოი გვიხატავს. ნაწარმოები სიღრმისეული, დახვეწილი პერსონაჟებით გამოირჩევა, რომლებიც გაცოცხლებულია მათი ურთიერთობებით საზოგადოებასა და ისტორიულ ეპოქასთან...",
+    "author": "ირაკლი ჯაბუა",
+    "imageUrl": "https://i.pinimg.com/564x/48/32/2f/48322fe7a51d386c485046efee117bd2.jpg",
+    "fullText": "https://res.cloudinary.com/dja1ebgeq/raw/upload/v1715606233/Articles/tolstoy_wqeup0.txt"
+  },
+  {
+    "id": 3,
+    "title": "სილვია პლათის 'ზარხუფი'",
+    "description": "სილვია პლათის ავტობიოგრაფიული, პირველი და უკანასკნელი რომანის ,,ზარხუფი“, საზოგადოებაში პოპულარობის მოპოვების ძირითადი მიზეზი ფემინიზმის თემაზე ღიად, თამამად საუბარი გახლავთ...",
+    "author": "ანამარი ხაჩატუროვი",
+    "imageUrl": "https://fivebooks.com/images/eMMkTYi9-DXmzsFj/rs:fit:144:0:1/sh:0.5/plain/fb/books/BC_0060837020.jpg",
+    "fullText": "https://res.cloudinary.com/dja1ebgeq/raw/upload/v1715606233/Articles/sylviaplath_tfdqw2.txt"
+  },
+  {
+    "id": 4,
+    "title": "ბენდის ,,Rage Against The Machine“ პოლიტიკა და აქტივიზმი",
+    "description": "როკ ჯგუფი “Rage Against the Machine“, 1991 წელს, ლოს ანჯელესში ჩამოყალიბდა. ის 90-იანი წლების ალტერნატიული როკისა და მეტალის სამყაროში, ერთ-ერთ ყველაზე მნიშვნელოვან და გარდამტეხ ჯგუფად მიიჩნევა",
+    "author": "ირაკლი ჯაბუა",
+    "imageUrl": "https://m.media-amazon.com/images/M/MV5BMTU0NTEwMzEwMV5BMl5BanBnXkFtZTcwNzE2NzAwMQ@@._V1_FMjpg_UX1000_.jpg",
+    "fullText": "https://res.cloudinary.com/dja1ebgeq/raw/upload/v1715606233/Articles/rageagainstthemachine_kyx5li.txt"
+  },
+  {
+    "id": 5,
+    "title": "ალბერ კამიუს „უცხო“ (2)",
+    "description": "რომანში, „უცხო”, ალბერ კამიუ მკითხველს ეგზისტენციალურ საკითხებთან მიმართებით საკუთარ შეხედულებებს უზიარებს. ნაწარმოების მთავარი გმირი, მერსო ალჟირში მცხოვრები ახალგაზრდა ფრანგია...",
+    "author": "მარიამ ბურდული",
+    "imageUrl": "https://i.pinimg.com/564x/97/a5/bd/97a5bd17758406a132940da123b8145c.jpg",
+    "fullText": "https://res.cloudinary.com/dja1ebgeq/raw/upload/v1715606232/Articles/camus_ugben4.txt"
+  },
+  {
+    "id": 6,
+    "title": "პინკ ფლოიდი - ,,The Wall“",
+    "description": "ბრიტანული როკ ჯგუფის, „პინკ ფლოიდის“ ალბომი „კედელი“ (“The Wall”) ყველასათვის ცნობილი უნდა იყოს. იგი, პროგრესული როკის ჟანრში ერთ-ერთ ყველაზე მნიშვნელოვან ნამუშევრად მიიჩნევა...",
+    "author": "ირაკლი ჯაბუა",
+    "imageUrl": "https://i.pinimg.com/564x/61/69/dc/6169dcda57aefb29157d7fee67fdc15b.jpg",
+    "fullText": "https://res.cloudinary.com/dja1ebgeq/raw/upload/v1715606233/Articles/thewallpf_kaxqhj.txt"
+  },
+  {
+    "id": 7,
+    "title": "„12 განრისხებული მამაკაცი“ - განხილვა",
+    "description": "სიდნი ლუმეტის 1957 წლის ამერიკული ფილმი „12 განრისხებული მამაკაცი” გვიამბობს ერთ ბიჭზე, რომელსაც ბრალად მამის მკვლელობა ედება...",
+    "author": "რომანოზ კეკენაძე",
+    "imageUrl": "https://ih1.redbubble.net/image.1856219220.0238/flat,750x,075,f-pad,750x1000,f8f8f8.jpg",
+    "fullText": "https://res.cloudinary.com/dja1ebgeq/raw/upload/v1715606232/Articles/12angrymen_oteuyc.txt"
+  },
+  {
+    "id": 8,
+    "title": "ფრანც კარფკას „გარდასახვა“",
+    "description": "ფრანც კაფკას ნოველას ,,გარდასახვა” დღევანდელ დღეს დიდი ადგილი უკავია მკითხველთა გულებსა და ლიტერატურაში...",
+    "author": "ანამარი ხაჩატუროვი",
+    "imageUrl": "https://i.pinimg.com/564x/2d/0a/c2/2d0ac25561912d411d54e77d9bb61996.jpg",
+    "fullText": "https://res.cloudinary.com/dja1ebgeq/raw/upload/v1715606232/Articles/kafkametamorphosis_jbbigg.txt"
+  },
+  {
+    "id": 9,
+    "title": "„რამდენიმე ინტერვიუ პირად საკითხებზე“ - რეცენზია",
+    "description": "„რამდენიმე ინტერვიუ პირად საკითხებზე“ - რეჟისორ ლანა ღოღობერიძის დრამატული მხატვრული ფილმია...",
+    "author": "მარიამ კუტალაძე",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/ka/thumb/2/23/%E1%83%A0%E1%83%90%E1%83%9B%E1%83%93%E1%83%94%E1%83%9C%E1%83%98%E1%83%9B%E1%83%94_%E1%83%98%E1%83%9C%E1%83%A2%E1%83%94%E1%83%A0%E1%83%95%E1%83%98%E1%83%A3_%E1%83%9E%E1%83%98%E1%83%A0%E1%83%90%E1%83%93_%E1%83%A1%E1%83%90%E1%83%99%E1%83%98%E1%83%97%E1%83%AE%E1%83%94%E1%83%91%E1%83%96%E1%83%94.jpg/1200px-%E1%83%A0%E1%83%90%E1%83%9B%E1%83%93%E1%83%94%E1%83%9C%E1%83%98%E1%83%9B%E1%83%94_%E1%83%98%E1%83%9C%E1%83%A2%E1%83%94%E1%83%A0%E1%83%95%E1%83%98%E1%83%A3_%E1%83%9E%E1%83%98%E1%83%A0%E1%83%90%E1%83%93_%E1%83%A1%E1%83%90%E1%83%99%E1%83%98%E1%83%97%E1%83%AE%E1%83%94%E1%83%91%E1%83%96%E1%83%94.jpg",
+    "fullText": "https://res.cloudinary.com/dja1ebgeq/raw/upload/v1715606232/Articles/ramdenimeinterviu_u4yipk.txt"
+  }
 ]

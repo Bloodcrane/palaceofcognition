@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { account, databases } from '../appwrite';
 import { ID, Query } from 'appwrite';
 import articles from '../Articles.json';
@@ -179,64 +179,75 @@ const ArticleList = () => {
   };
 
   return (
-    <motion.div
-      variants={container}
-      initial="hidden"
-      animate="show"
-      style={{ width: '100%', minHeight: '500px' }}
-    >
-      {isLoading ? (
-        <div style={{ textAlign: 'center', marginTop: '100px', fontFamily: 'mainFont' }}>
-          იტვირთება...
-        </div>
-      ) : (
-        <div style={{ marginBottom: '100px' }}>
-          {currentArticles.map((article) => {
-            const articleId = article.id.toString();
-            return (
-              <motion.div
-                key={articleId}
-                variants={item}
-                className="webComponent"
-                whileHover={{
-                  scale: 1.01,
-                  border: `1px solid rgba(255,255,255,0.4)`,
-                  transition: { duration: 0.3 }
-                }}
-              >
-                <img src={article.imageUrl} className="webComponent-bg-img" alt="" />
-                <div className="webComponent-overlay">
-                  <h2 className="webComponent-title">{article.title}</h2>
-                  <div className="webComponent-meta">
-                    <span className="webComponent-author">{article.author}</span>
-                  </div>
-                  <p className="webComponent-description">{article.description}</p>
-                </div>
-                <img src={article.imageUrl} className="webComponent-img" alt="" />
-                <div className="compact-button-row">
-                  <Link to={`/article/${articleId}`} className="compact-button">
-                    🗞️ ნახვა
-                  </Link>
-                  <div className="vote-group-compact">
-                    <button
-                      className="compact-button like-btn"
-                      onClick={() => handleVote(articleId, 'like')}
-                    >
-                      💚 {likes[articleId] || 0}
-                    </button>
-                    <button
-                      className="compact-button dislike-btn"
-                      onClick={() => handleVote(articleId, 'dislike')}
-                    >
-                      💔 {dislikes[articleId] || 0}
-                    </button>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
-      )}
+    <>
+      <AnimatePresence mode="wait">
+        {isLoading ? (
+          <motion.div
+            key="loading"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{ textAlign: 'center', marginTop: '100px', fontFamily: 'mainFont', width: '100%', minHeight: '500px' }}
+          >
+            იტვირთება...
+          </motion.div>
+        ) : (
+          <motion.div
+            key="content"
+            variants={container}
+            initial="hidden"
+            animate="show"
+            style={{ width: '100%', minHeight: '500px' }}
+          >
+            <div style={{ marginBottom: '100px' }}>
+              {currentArticles.map((article) => {
+                const articleId = article.id.toString();
+                return (
+                  <motion.div
+                    key={articleId}
+                    variants={item}
+                    className="webComponent"
+                    whileHover={{
+                      scale: 1.01,
+                      border: `1px solid rgba(255,255,255,0.4)`,
+                      transition: { duration: 0.3 }
+                    }}
+                  >
+                    <img src={article.imageUrl} className="webComponent-bg-img" alt="" />
+                    <div className="webComponent-overlay">
+                      <h2 className="webComponent-title">{article.title}</h2>
+                      <div className="webComponent-meta">
+                        <span className="webComponent-author">{article.author}</span>
+                      </div>
+                      <p className="webComponent-description">{article.description}</p>
+                    </div>
+                    <img src={article.imageUrl} className="webComponent-img" alt="" />
+                    <div className="compact-button-row">
+                      <Link to={`/article/${articleId}`} className="compact-button">
+                        🗞️ ნახვა
+                      </Link>
+                      <div className="vote-group-compact">
+                        <button
+                          className="compact-button like-btn"
+                          onClick={() => handleVote(articleId, 'like')}
+                        >
+                          💚 {likes[articleId] || 0}
+                        </button>
+                        <button
+                          className="compact-button dislike-btn"
+                          onClick={() => handleVote(articleId, 'dislike')}
+                        >
+                          💔 {dislikes[articleId] || 0}
+                        </button>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="pagination-container-compact">
         <Link
@@ -259,7 +270,7 @@ const ArticleList = () => {
           →
         </Link>
       </div>
-    </motion.div>
+    </>
   );
 };
 

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import LatestNewsComponent from "../Components/LatestNews"
 import WebAnnoucement from "../Components/WebAnnoucement";
 import { databases } from '../appwrite';
@@ -47,13 +46,12 @@ const HomePage = () => {
                 />
 
                 {!isLoading && latestArticle ? (
-                    <Link to={`/article/${latestArticle.$id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                        <LatestNewsComponent
-                            imageUrl={latestArticle.imageUrl}
-                            title="უახლესი სტატია"
-                            description={`${latestArticle.title} - ${latestArticle.author}`}
-                        />
-                    </Link>
+                    <LatestNewsComponent
+                        imageUrl={latestArticle.imageUrl}
+                        title="უახლესი სტატია"
+                        description={`${latestArticle.title} - ${latestArticle.author}`}
+                        articleId={latestArticle.$id}
+                    />
                 ) : !isLoading && (
                     <LatestNewsComponent
                         imageUrl="https://upload.wikimedia.org/wikipedia/ka/thumb/2/23/%E1%83%A0%E1%83%90%E1%83%9B%E1%83%93%E1%83%94%E1%83%9C%E1%83%98%E1%83%9B%E1%83%94_%E1%83%98%E1%83%9C%E1%83%A2%E1%83%94%E1%83%A0%E1%83%95%E1%83%98%E1%83%A3_%E1%83%9E%E1%83%98%E1%83%A0%E1%83%90%E1%83%93_%E1%83%A1%E1%83%90%E1%83%99%E1%83%98%E1%83%97%E1%83%AE%E1%83%94%E1%83%91%E1%83%96%E1%83%94.jpg/1200px-%E1%83%A0%E1%83%90%E1%83%9B%E1%83%93%E1%83%94%E1%83%9C%E1%83%98%E1%83%9B%E1%83%94_%E1%83%98%E1%83%9C%E1%83%A2%E1%83%94%E1%83%A0%E1%83%95%E1%83%98%E1%83%A3_%E1%83%9E%E1%83%98%E1%83%A0%E1%83%90%E1%83%93_%E1%83%A1%E1%83%90%E1%83%99%E1%83%98%E1%83%97%E1%83%AE%E1%83%94%E1%83%91%E1%83%96%E1%83%94.jpg"
