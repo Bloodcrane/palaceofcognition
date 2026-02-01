@@ -33,11 +33,59 @@
     margin-bottom: 20px;
     background-image: url(../Images/user-profile-4255.svg);
     background-position: center;
-    background-size: contain;
+    background-size: cover;
+    /* Changed to cover for profile pics */
     background-repeat: no-repeat;
-    height: 100px;
-    width: 100px;
+    height: 120px;
+    /* Slightly larger */
+    width: 120px;
     margin: 0 auto;
+    border-radius: 50%;
+    /* Make circular */
+    border: 3px solid #598eff;
+    background-color: #333;
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-img-wrapper {
+    position: relative;
+    width: 120px;
+    margin: 0 auto 20px auto;
+}
+
+.change-img-btn {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: #598eff;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.1rem;
+    border: 3px solid #2b2b2b;
+    transition: all 0.2s;
+    z-index: 10;
+}
+
+.change-img-btn:hover {
+    transform: scale(1.1);
+    background: #4a7be6;
+}
+
+.img-loading-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
 }
 
 

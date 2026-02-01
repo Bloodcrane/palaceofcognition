@@ -10,8 +10,13 @@ const VOTES_DATABASE_ID = '697e6e0200022dd882b7';
 const VOTES_COLLECTION_ID = 'user_votes';
 const ARTICLES_COLLECTION_ID = 'articles'; // Matches the collection the user created
 const IMAGES_BUCKET_ID = '697e88ae002f9e02cadb'; // Matches the bucket the user created
+const PROFILES_COLLECTION_ID = 'user_profiles';
 
 const UserPage = ({ user }) => {
+  const [userProfile, setUserProfile] = useState(null);
+  const [isUploadingProfilePic, setIsUploadingProfilePic] = useState(false);
+  const [profileDescription, setProfileDescription] = useState('');
+  const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [votedArticles, setVotedArticles] = useState([]);
   const [myArticles, setMyArticles] = useState([]);
 
@@ -45,7 +50,37 @@ const UserPage = ({ user }) => {
     if (!user) return;
 
     try {
-      // 1. Fetch user votes
+      // 0. Fetch/Sync user profile
+      try {
+        const profileRes = await databases.listDocuments(
+          VOTES_DATABASE_ID,
+          PROFILES_COLLECTION_ID,
+          [Query.equal('user_id', user.$id)]
+        );
+
+        if (profileRes.documents.length > 0) {
+          setUserProfile(profileRes.documents[0]);
+          setProfileDescription(profileRes.documents[0].description || '');
+        } else {
+          // Create initial profile
+          const newProfile = await databases.createDocument(
+            VOTES_DATABASE_ID,
+            PROFILES_COLLECTION_ID,
+            ID.unique(),
+            {
+              user_id: user.$id,
+              name: user.name || "Anonymous",
+              profile_img_url: "",
+              description: ""
+            }
+          );
+          setUserProfile(newProfile);
+          setProfileDescription('');
+        }
+      } catch (profileErr) {
+        console.error("Error syncing profile:", profileErr);
+      }
+
       try {
         const votesResponse = await databases.listDocuments(
           VOTES_DATABASE_ID,
@@ -78,7 +113,14 @@ const UserPage = ({ user }) => {
                 isDynamic: true
               };
             } catch (err) {
-              console.warn(`Could not fetch dynamic article ${vote.post_id}:`, err);
+              if (err.code === 404) {
+                // Auto-cleanup: if the article no longer exists, delete the vote record
+                // not using await here to not block the current loop, but it's fine
+                databases.deleteDocument(VOTES_DATABASE_ID, VOTES_COLLECTION_ID, vote.$id)
+                  .catch(e => console.error("Failed to cleanup orphaned vote:", e));
+              } else {
+                console.warn(`Could not fetch dynamic article ${vote.post_id}:`, err);
+              }
             }
           }
 
@@ -250,15 +292,119 @@ const UserPage = ({ user }) => {
     }
   };
 
+  const handleSaveDescription = async () => {
+    if (!userProfile) return;
+
+    try {
+      const updated = await databases.updateDocument(
+        VOTES_DATABASE_ID,
+        PROFILES_COLLECTION_ID,
+        userProfile.$id,
+        { description: profileDescription }
+      );
+      setUserProfile(updated);
+      setIsEditingDescription(false);
+      alert("აღწერა განახლდა!");
+    } catch (error) {
+      console.error("Description update error:", error);
+      alert("აღწერის განახლება ვერ მოხერხდა.");
+    }
+  };
+
+  const handleProfilePicUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setIsUploadingProfilePic(true);
+    try {
+      // 1. Upload to storage
+      const uploadedFile = await storage.createFile(IMAGES_BUCKET_ID, ID.unique(), file);
+      const imageUrl = storage.getFileView(IMAGES_BUCKET_ID, uploadedFile.$id).toString();
+
+      // 2. Update profile document
+      if (userProfile) {
+        const updated = await databases.updateDocument(
+          VOTES_DATABASE_ID,
+          PROFILES_COLLECTION_ID,
+          userProfile.$id,
+          { profile_img_url: imageUrl }
+        );
+        setUserProfile(updated);
+      }
+      alert("პროფილის სურათი განახლდა!");
+    } catch (error) {
+      console.error("Profile pic upload error:", error);
+      alert("სურათის ატვირთვა ვერ მოხერხდა.");
+    } finally {
+      setIsUploadingProfilePic(false);
+    }
+  };
+
   return (
     <div className="userPage">
       {user ? (
         <div className="user-container">
           <div className="profileContainer">
-            <div className="profileIcon"></div>
-            <h2>{user.name || 'Anonymous'}</h2>
+            <div className="profile-img-wrapper">
+              <div
+                className="profileIcon"
+                style={userProfile?.profile_img_url ? { backgroundImage: `url(${userProfile.profile_img_url})` } : {}}
+              >
+                {isUploadingProfilePic && <div className="img-loading-overlay">...</div>}
+              </div>
+              <label className="change-img-btn">
+                📸
+                <input type="file" accept="image/*" onChange={handleProfilePicUpload} hidden disabled={isUploadingProfilePic} />
+              </label>
+            </div>
+            <h2>{userProfile?.name || user.name || 'Anonymous'}</h2>
             <p style={{ color: '#888', fontSize: '0.9rem', marginBottom: '10px', marginTop: '5px' }}>{user.email}</p>
-            <p>თქვენი პროფილის გვერდი</p>
+
+            {isEditingDescription ? (
+              <div style={{ marginTop: '15px', width: '100%' }}>
+                <textarea
+                  value={profileDescription}
+                  onChange={(e) => setProfileDescription(e.target.value)}
+                  placeholder="დაამატეთ თქვენი აღწერა..."
+                  style={{
+                    width: '100%',
+                    minHeight: '80px',
+                    padding: '10px',
+                    backgroundColor: '#1e1e1e',
+                    border: '1px solid #444',
+                    borderRadius: '5px',
+                    color: 'white',
+                    fontFamily: 'inherit',
+                    fontSize: '0.9rem',
+                    resize: 'vertical'
+                  }}
+                />
+                <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                  <button onClick={handleSaveDescription} className="post-toggle-btn" style={{ flex: 1, background: '#5b744d' }}>
+                    შენახვა
+                  </button>
+                  <button onClick={() => {
+                    setIsEditingDescription(false);
+                    setProfileDescription(userProfile?.description || '');
+                  }} className="post-toggle-btn" style={{ flex: 1, background: '#3d2929' }}>
+                    გაუქმება
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div style={{ marginTop: '10px' }}>
+                <p style={{ fontSize: '0.9rem', fontStyle: 'italic', opacity: 0.8, marginBottom: '8px' }}>
+                  {profileDescription || 'აღწერა არ არის დამატებული'}
+                </p>
+                <button
+                  onClick={() => setIsEditingDescription(true)}
+                  className="post-toggle-btn"
+                  style={{ fontSize: '0.85rem', padding: '6px 12px', background: '#333' }}
+                >
+                  ✏️ აღწერის რედაქტირება
+                </button>
+              </div>
+            )}
             <div className="profile-actions-vertical">
               <button
                 className="post-toggle-btn"

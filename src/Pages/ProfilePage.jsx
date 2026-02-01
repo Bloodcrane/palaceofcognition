@@ -7,6 +7,7 @@ import './UserPage.css'; // Reuse UserPage styles
 
 const VOTES_DATABASE_ID = '697e6e0200022dd882b7';
 const ARTICLES_COLLECTION_ID = 'articles';
+const PROFILES_COLLECTION_ID = 'user_profiles';
 
 const container = {
     hidden: { opacity: 0 },
@@ -25,12 +26,34 @@ const ProfilePage = () => {
     const { id: userId } = useParams();
     const [userArticles, setUserArticles] = useState([]);
     const [authorName, setAuthorName] = useState('');
+    const [profileImgUrl, setProfileImgUrl] = useState('');
+    const [profileDescription, setProfileDescription] = useState('');
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchUserProfile = async () => {
             setIsLoading(true);
+            let detectedName = '';
             try {
+                // 1. Fetch public profile metadata
+                try {
+                    const profileRes = await databases.listDocuments(
+                        VOTES_DATABASE_ID,
+                        PROFILES_COLLECTION_ID,
+                        [Query.equal('user_id', userId)]
+                    );
+                    if (profileRes.documents.length > 0) {
+                        const prof = profileRes.documents[0];
+                        detectedName = prof.name;
+                        setAuthorName(prof.name);
+                        setProfileImgUrl(prof.profile_img_url);
+                        setProfileDescription(prof.description || '');
+                    }
+                } catch (profErr) {
+                    console.error("Error fetching public profile:", profErr);
+                }
+
+                // 2. Fetch articles
                 const response = await databases.listDocuments(
                     VOTES_DATABASE_ID,
                     ARTICLES_COLLECTION_ID,
@@ -40,14 +63,16 @@ const ProfilePage = () => {
                     ]
                 );
 
-                if (response.documents.length > 0) {
+                setUserArticles(response.documents);
+
+                // If name still empty, try fallback from articles
+                if (!detectedName && response.documents.length > 0) {
                     setAuthorName(response.documents[0].author);
-                    setUserArticles(response.documents);
-                } else {
+                } else if (!detectedName) {
                     setAuthorName('მომხმარებელი');
                 }
             } catch (error) {
-                console.error("Error fetching profile articles:", error);
+                console.error("Error fetching profile data:", error);
             } finally {
                 setIsLoading(false);
             }
@@ -64,9 +89,17 @@ const ProfilePage = () => {
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                 >
-                    <div className="profileIcon"></div>
+                    <div
+                        className="profileIcon"
+                        style={profileImgUrl ? { backgroundImage: `url(${profileImgUrl})` } : {}}
+                    ></div>
                     <h2>{authorName}</h2>
-                    <p>ავტორის პროფილი</p>
+                    {profileDescription && (
+                        <p style={{ fontSize: '0.9rem', fontStyle: 'italic', opacity: 0.8, marginTop: '10px', maxWidth: '300px' }}>
+                            {profileDescription}
+                        </p>
+                    )}
+                    <p style={{ marginTop: profileDescription ? '5px' : '0' }}>ავტორის პროფილი</p>
                 </motion.div>
 
                 <div className="management-section" style={{ marginTop: '50px' }}>
