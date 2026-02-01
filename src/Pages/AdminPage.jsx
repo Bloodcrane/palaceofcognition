@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Navigate } from 'react-router-dom';
 import { databases, storage } from '../appwrite';
 import { ID, Query } from 'appwrite';
-import { motion, AnimatePresence } from 'framer-motion';
 import './UserPage.css'; // Reuse UserPage styles
 
 const VOTES_DATABASE_ID = '697e6e0200022dd882b7';
