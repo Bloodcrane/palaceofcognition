@@ -106,10 +106,10 @@ const SingleArticlePage = () => {
             style={{
               backdropFilter: 'blur(50px)',
               marginTop: "60px",
-              textShadow: '2px 2px 5px black',
               backgroundImage: 'linear-gradient(#131313, #0c0c0c)',
               textAlign: 'center',
-              width: '100%'
+              width: '100%',
+              borderBottom: '1px solid #333'
             }}
           >
             <h1>{article.title}</h1>
@@ -121,7 +121,7 @@ const SingleArticlePage = () => {
                 width: "auto",
                 height: isDesktopOrLaptop ? "400px" : "250px",
                 borderRadius: "10px",
-                boxShadow: "0px 5px 15px rgba(0,0,0,0.5)",
+                border: '1px solid #444',
                 maxWidth: '90%'
               }}
             />

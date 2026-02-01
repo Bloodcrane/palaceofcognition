@@ -5,7 +5,6 @@ import { account, databases } from '../appwrite';
 import { ID, Query } from 'appwrite';
 import articles from '../Articles.json';
 
-const colors = ['#6b7a6f', '#775a5a', '#634875', '#647d94'];
 const articlesPerPage = 3;
 
 // Placeholder Database ID - Replace with actual ID from Appwrite Console
@@ -13,14 +12,18 @@ const VOTES_DATABASE_ID = '697e6e0200022dd882b7';
 const VOTES_COLLECTION_ID = 'user_votes';
 const ARTICLES_COLLECTION_ID = 'articles';
 
-function getColorIndex(str) {
-  let hash = 0;
-  if (!str) return 0;
-  for (let i = 0; i < str.length; i++) {
-    hash += str.charCodeAt(i);
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.2 }
   }
-  return hash % colors.length;
-}
+};
+
+const item = {
+  hidden: { opacity: 0, y: 50 },
+  show: { opacity: 1, y: 0 }
+};
 
 const ArticleList = () => {
   const [allArticles, setAllArticles] = useState([]);
@@ -175,103 +178,88 @@ const ArticleList = () => {
     }
   };
 
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.2 }
-    }
-  };
-
-  const item = {
-    hidden: { opacity: 0, y: 50 },
-    show: { opacity: 1, y: 0 }
-  };
-
-  if (isLoading) return <div style={{ textAlign: 'center', marginTop: '100px' }}>იტვირთება...</div>;
-
   return (
-    <div>
-      <motion.div
-        style={{ marginBottom: '100px' }}
-        variants={container}
-        initial="hidden"
-        animate="show"
-      >
-        {currentArticles.map((article) => {
-          const articleId = article.id.toString();
-          const colorIndex = getColorIndex(articleId);
-          return (
-            <motion.div
-              key={articleId}
-              variants={item}
-              className="webComponent"
-              style={{
-                backgroundColor: colors[colorIndex],
-                border: `2px solid ${colors[colorIndex]}`,
-                boxShadow: `0px 0px 30px ${colors[colorIndex]}`,
-              }}
-              whileHover={{
-                scale: 1.02,
-                boxShadow: `0px 0px 50px ${colors[colorIndex]}`,
-                transition: { duration: 0.3 }
-              }}
-            >
-              <div className="webComponent-inside-container">
-                <img src={article.imageUrl} alt={article.title} className="webComponent-image" />
-                <h2 className="webComponent-title">{article.title}</h2>
-                <label className="webComponent-author">{article.author}</label>
-                <p className="webComponent-description">{article.description}</p>
-                <div className="btnMargin">
-                  <Link to={`/article/${articleId}`} className="webComponent-button">
-                    🗞️ View More
-                  </Link>
-                  <button
-                    style={{ backgroundColor: '#5b744d', borderColor: '#86947e' }}
-                    className="webComponent-button"
-                    onClick={() => handleVote(articleId, 'like')}
-                  >
-                    💚 Like {likes[articleId] || 0}
-                  </button>
-                  <button
-                    style={{ backgroundColor: '#3d2929', borderColor: '#856161' }}
-                    className="webComponent-button"
-                    onClick={() => handleVote(articleId, 'dislike')}
-                  >
-                    💔 Dislike {dislikes[articleId] || 0}
-                  </button>
+    <motion.div
+      variants={container}
+      initial="hidden"
+      animate="show"
+      style={{ width: '100%', minHeight: '500px' }}
+    >
+      {isLoading ? (
+        <div style={{ textAlign: 'center', marginTop: '100px', fontFamily: 'mainFont' }}>
+          იტვირთება...
+        </div>
+      ) : (
+        <div style={{ marginBottom: '100px' }}>
+          {currentArticles.map((article) => {
+            const articleId = article.id.toString();
+            return (
+              <motion.div
+                key={articleId}
+                variants={item}
+                className="webComponent"
+                whileHover={{
+                  scale: 1.01,
+                  border: `1px solid rgba(255,255,255,0.4)`,
+                  transition: { duration: 0.3 }
+                }}
+              >
+                <img src={article.imageUrl} className="webComponent-bg-img" alt="" />
+                <div className="webComponent-overlay">
+                  <h2 className="webComponent-title">{article.title}</h2>
+                  <div className="webComponent-meta">
+                    <span className="webComponent-author">{article.author}</span>
+                  </div>
+                  <p className="webComponent-description">{article.description}</p>
                 </div>
-              </div>
-            </motion.div>
-          );
-        })}
-      </motion.div>
+                <img src={article.imageUrl} className="webComponent-img" alt="" />
+                <div className="compact-button-row">
+                  <Link to={`/article/${articleId}`} className="compact-button">
+                    🗞️ ნახვა
+                  </Link>
+                  <div className="vote-group-compact">
+                    <button
+                      className="compact-button like-btn"
+                      onClick={() => handleVote(articleId, 'like')}
+                    >
+                      💚 {likes[articleId] || 0}
+                    </button>
+                    <button
+                      className="compact-button dislike-btn"
+                      onClick={() => handleVote(articleId, 'dislike')}
+                    >
+                      💔 {dislikes[articleId] || 0}
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      )}
 
-      <div
-        className="pagination-container"
-        style={{ position: 'fixed', bottom: '20px', left: '50%', transform: 'translateX(-50%)', zIndex: '999' }}
-      >
+      <div className="pagination-container-compact">
         <Link
           to={`?page=${currentPage > 1 ? currentPage - 1 : 1}`}
-          className="layoutButton"
+          className="comp-nav-btn"
           disabled={currentPage === 1}
           onClick={handlePageChange}
         >
-          Previous
+          ←
         </Link>
+        <span className="page-indicator">
+          {currentPage} / {totalPages}
+        </span>
         <Link
           to={`?page=${currentPage < totalPages ? currentPage + 1 : totalPages}`}
-          className="layoutButton"
+          className="comp-nav-btn"
           disabled={currentPage === totalPages}
           onClick={handlePageChange}
         >
-          Next
+          →
         </Link>
-        <div style={{ marginTop: '10px', textAlign: 'center', opacity: 0.6 }}>
-          Page {currentPage} of {totalPages}
-        </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

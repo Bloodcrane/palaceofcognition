@@ -1,26 +1,28 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const WebAnnoucement = ({imageUrl, title, description}) => {
-    const navigate = useNavigate();
+const WebAnnoucement = ({ imageUrl, title, description }) => {
+  const navigate = useNavigate();
 
-    const style = {
-        backgroundImage: "url('./Images/Style/noise-dark.png'), linear-gradient(to top, #4d71d3, #db6946)",
-        borderColor: '#919191',
-      };
+  const handleSignInRedirect = () => {
+    navigate("/signup");
+  }
 
-      const handleSignInRedirect = () => {
-        navigate("/signup");
-      }
-
-    return (
-        <div style={style} className="latestNews">
-        <img src={imageUrl} className="latestNews-image" alt="" />
-        <h1 className="latestNews-title">{title}</h1>
-        <label className="latestNews-description">{description}</label>
-        <button style={{ backgroundColor: '#6c6f79', borderColor: '#8d9fc5' }} className='webComponent-button' onClick={handleSignInRedirect}>ახალი ანგარიშის შექმნა</button>
-        </div>
-    )
+  return (
+    <div className="latestNews">
+      {imageUrl && <img src={imageUrl} className="webComponent-bg-img" alt="" />}
+      <div className="webComponent-overlay">
+        <h1 className="webComponent-title">{title}</h1>
+        <label className="webComponent-description">{description}</label>
+      </div>
+      {imageUrl && <img src={imageUrl} className="webComponent-img" alt="" />}
+      <div className="compact-button-row" style={{ justifyContent: 'center' }}>
+        <button className='compact-button' onClick={handleSignInRedirect}>
+          ახალი ანგარიშის შექმნა
+        </button>
+      </div>
+    </div>
+  )
 }
 
 export default WebAnnoucement

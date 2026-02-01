@@ -21,9 +21,11 @@
     background-color: #2b2b2b;
     padding: 30px;
     border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: none;
+    border: 1px solid #444;
     margin-top: 20px;
-    width: 350px;
+    width: 90%;
+    max-width: 350px;
     border: 1px solid #444;
 }
 
@@ -173,7 +175,7 @@
     display: flex;
     height: 120px;
     border: 1px solid #333;
-    transition: border-color 0.2s;
+    transition: all 0.2s;
 }
 
 .manage-card:hover {
@@ -243,13 +245,15 @@
 .vote-card {
     background-color: #1e1e1e;
     border-radius: 10px;
+    border: 1px solid #333;
     overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    transition: transform 0.2s;
+    box-shadow: none;
+    transition: transform 0.2s, border-color 0.2s;
 }
 
 .vote-card:hover {
     transform: translateY(-5px);
+    border-color: #598eff;
 }
 
 .vote-card-link {
@@ -279,7 +283,8 @@
     color: white;
     font-size: 0.8rem;
     font-weight: bold;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    box-shadow: none;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .vote-card-content {
