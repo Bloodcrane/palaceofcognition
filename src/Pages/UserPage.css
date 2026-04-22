@@ -31,7 +31,7 @@
 
 .profileIcon {
     margin-bottom: 20px;
-    background-image: url(/user-profile-4255.svg);
+    background-image: url(../Images/user-profile-4255.svg);
     background-position: center;
     background-size: cover;
     /* Changed to cover for profile pics */
