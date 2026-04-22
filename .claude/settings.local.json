@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c \"import sys,json;d=json.load\\(sys.stdin\\);print\\(d['version']\\)\")",
+      "Bash(cp /home/luka/Projects/palaceofcognition/src/Images/Style/noise-dark.png /home/luka/Projects/palaceofcognition/public/noise-dark.png)",
+      "Bash(cp /home/luka/Projects/palaceofcognition/src/Images/Style/noise-light.png /home/luka/Projects/palaceofcognition/public/noise-light.png)",
+      "Bash(cp /home/luka/Projects/palaceofcognition/src/Images/user-profile-4255.svg /home/luka/Projects/palaceofcognition/public/user-profile-4255.svg)",
+      "Bash(yarn tsc *)",
+      "Bash(yarn build *)"
+    ]
+  }
+}
